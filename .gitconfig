@@ -1,0 +1,6 @@
+[user]
+    name = "Jerry Peng"
+    email = ""
+[core]
+    excludesfile = ~/.gitignore
+    editor = vim
