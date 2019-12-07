@@ -27,7 +27,7 @@ alias rm="/usr/local/lib/node_modules/safe-rm/bin/rm.sh"
 alias ..="cd .."
 
 # Git alias for dotfiles
-alias config='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 
 # Tmux Alias
 alias tmuxre="sh ~/.tmux/plugins/tmux-resurrect/scripts/restore.sh"
