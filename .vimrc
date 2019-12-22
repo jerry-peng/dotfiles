@@ -7,23 +7,38 @@ set nocompatible    " set to not be vi-compatible
 filetype off        " force plugins to load when it is turned back on below
 
 """ Plugins
+function! BuildComposer(info)
+  if a:info.status != 'unchanged' || a:info.force
+    if has('nvim')
+      !cargo build --release --locked
+    else
+      !cargo build --release --locked --no-default-features --features json-rpc
+    endif
+  endif
+endfunction
+
 call plug#begin()
+Plug '/usr/local/opt/fzf'
 Plug 'dense-analysis/ale'
 Plug 'raimondi/delimitmate'
 Plug 'mattn/emmet-vim'
+Plug 'junegunn/fzf.vim'
 Plug 'yggdroot/indentline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'godlygeek/tabular'
 Plug 'ajh17/VimCompletesMe'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'alvan/vim-closetag', { 'for': ['html', 'xml', 'javascript', 'javascript.jsx']}
 Plug 'tpope/vim-commentary'
-Plug 'maxmellon/vim-jsx-pretty', { 'for': 'javascript.jsx'}
+Plug 'easymotion/vim-easymotion'
+Plug 'airblade/vim-gitgutter'
+" Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
-Plug 'posva/vim-vue', { 'for': 'vue' }
-Plug 'HerringtonDarkholme/yats.vim', { 'for': ['javascript', 'typescript'] }
+Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
 """ Syntax
@@ -65,13 +80,6 @@ set showmatch
 set textwidth=79
 set formatoptions=tcqrn1
 
-
-""" Folding
-set foldmethod=manual   " fold based on indent level
-set foldnestmax=10      " 10 nested fold max
-set foldlevel=1
-set nofoldenable
-
 """ Misc
 set encoding=utf-8
 set hidden          " allow hidden buffers
@@ -83,10 +91,16 @@ set viminfo='100,<9999,s100   " store info no more than 100 files at a time, 999
 """ Key remap
 nnoremap j gj
 nnoremap k gk
+
+" Adjust windows
 nnoremap <Up>    <C-w>-
 nnoremap <Down>  <C-w>+
 nnoremap <Left>  <C-w><
 nnoremap <Right> <C-w>>
+
+" zoom windows
+nnoremap <leader>o <c-w><Bar><c-w>_<cr>
+nnoremap <leader>= <c-w>=
 
 " verymagic search
 nnoremap / /\v
