@@ -38,4 +38,3 @@ export CPPFLAGS="-I/usr/local/opt/llvm/include"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 export PATH
-
