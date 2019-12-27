@@ -47,7 +47,7 @@ syntax on		    " enable syntax highlighting
 filetype plugin indent on
 
 """ Leader key
-let mapleader = ","
+let mapleader = " "
 
 """ UI Config
 set cursorline      " highlight current linee
@@ -100,15 +100,15 @@ nnoremap <Left>  <C-w><
 nnoremap <Right> <C-w>>
 
 " zoom windows
-nnoremap <leader>o <c-w><Bar><c-w>_<cr>
-nnoremap <leader>= <c-w>=
+nnoremap <leader>= <c-w><Bar><c-w>_<cr>
+nnoremap <leader>- <c-w>=
 
 " verymagic search
 nnoremap / /\v
 vnoremap / /\v
 
 " clear search
-map <leader><space> :let @/=''<CR>
+map <leader>c :let @/=''<CR>
 
 " toggle tab/EOL characters
 map <leader>l :set list!<CR>
