@@ -25,13 +25,14 @@ Plug 'mattn/emmet-vim'
 Plug 'junegunn/fzf.vim'
 Plug 'yggdroot/indentline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'godlygeek/tabular'
 Plug 'ajh17/VimCompletesMe'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'alvan/vim-closetag', { 'for': ['html', 'xml', 'javascript', 'javascript.jsx']}
 Plug 'tpope/vim-commentary'
+Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
+Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 Plug 'sheerun/vim-polyglot'
@@ -77,7 +78,7 @@ set smartcase
 set showmatch
 
 """ Formatting
-set textwidth=79
+" set textwidth=79
 set formatoptions=tcqrn1
 
 """ Misc
@@ -111,6 +112,9 @@ map <leader><space> :let @/=''<CR>
 
 " toggle tab/EOL characters
 map <leader>l :set list!<CR>
+
+" easy-align
+vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
 
 """ Filetype indentations
 au FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
@@ -150,3 +154,6 @@ let g:airline_theme='solarized'
 
 " resolve delimitmate and closetag conflict
 let b:delimitMate_matchpairs = "(:),[:],{:}"
+
+" disable polyglot markdown
+let g:polyglot_disabled = ['markdown']
