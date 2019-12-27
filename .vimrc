@@ -20,6 +20,7 @@ endfunction
 call plug#begin()
 Plug '/usr/local/opt/fzf'
 Plug 'dense-analysis/ale'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'raimondi/delimitmate'
 Plug 'mattn/emmet-vim'
 Plug 'junegunn/fzf.vim'
