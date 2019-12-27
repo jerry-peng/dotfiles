@@ -49,6 +49,7 @@ filetype plugin indent on
 
 """ Leader key
 let mapleader = " "
+let g:mapleader = " "
 
 """ UI Config
 set cursorline      " highlight current linee
@@ -60,9 +61,9 @@ set visualbell      " show blink cursor
 set wrap
 
 """ Whitespace
-set tabstop=4		" number of visual spaces per TAB
-set shiftwidth=4    " on pressing tab, insert 2 spaces:
-set softtabstop=4	" number of spaces in tab when editing
+set tabstop=2		" number of visual spaces per TAB
+set shiftwidth=2    " on pressing tab, insert 2 spaces:
+set softtabstop=2	" number of spaces in tab when editing
 set expandtab		" tabs are spaces
 
 """ Cursor motion
@@ -90,9 +91,22 @@ set mouse=a         " enable mouse selection
 set ttyfast         " rendering
 set viminfo='100,<9999,s100   " store info no more than 100 files at a time, 9999 lines of text, 100kb of data"
 
+
 """ Key remap
+
+" move linewise when texts are wrapped
 nnoremap j gj
 nnoremap k gk
+
+" auto indent for brackets
+inoremap {<CR> {<CR>}<Esc>O
+
+" easier write and quit
+nmap <leader>w :w!<cr>
+nmap <leader>q :q<cr>
+
+"select all
+nnoremap <leader>a ggVG
 
 " Adjust windows
 nnoremap <Up>    <C-w>-
@@ -111,6 +125,11 @@ vnoremap / /\v
 " clear search
 map <leader>c :let @/=''<CR>
 
+" copy and paste from outside buffer
+nnoremap <leader>p :set paste<CR>"+p:set nopaste<CR>
+vnoremap <leader>p <Esc>:set paste<CR>gv"+p:set nopaste<CR>
+vnoremap <leader>y "+y
+
 " toggle tab/EOL characters
 map <leader>l :set list!<CR>
 
@@ -118,13 +137,7 @@ map <leader>l :set list!<CR>
 vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
 
 """ Filetype indentations
-au FileType html setlocal shiftwidth=2 tabstop=2 softtabstop=2
-au FileType javascript setlocal shiftwidth=2 tabstop=2 softtabstop=2
-au FileType json setlocal shiftwidth=2 tabstop=2 softtabstop=2
-au FileType css setlocal shiftwidth=2 tabstop=2 softtabstop=2
-au FileType vue setlocal shiftwidth=2 tabstop=2 softtabstop=2
-au FileType vue syntax sync fromstart
-au BufNewFile,BufRead *.vue set ft=vue
+au FileType pytyon setlocal shiftwidth=4 tabstop=4 softtabstop=4
 
 """ Formatters
 au FileType javascript setlocal formatprg=prettier
@@ -133,6 +146,8 @@ au FileType typescript setlocal formatprg=prettier\ --parser\ typescript
 au FileType html setlocal formatprg=js-beautify\ --type\ html
 au FileType scss setlocal formatprg=prettier\ --parser\ css
 au FileType css setlocal formatprg=prettier\ --parser\ css
+au FileType vue syntax sync fromstart
+au BufNewFile,BufRead *.vue set ft=vue
 
 
 """ Plugin configurations
