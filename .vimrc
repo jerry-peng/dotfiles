@@ -28,6 +28,8 @@ Plug 'mattn/emmet-vim'
 Plug 'junegunn/fzf.vim'
 Plug 'yggdroot/indentline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'majutsushi/tagbar'
+Plug 'vim-scripts/taglist.vim'
 Plug 'ajh17/VimCompletesMe'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -43,7 +45,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
-Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
@@ -138,7 +139,11 @@ vnoremap <leader>y "+y
 map <leader>l :set list!<CR>
 
 " easy-align
-vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
+vmap <leader><Bslash> :EasyAlign*<Bar><Enter>
+
+" tagbar
+nmap <leader>t :TagbarToggle<CR>
+
 
 """ Filetype indentations
 au FileType pytyon setlocal shiftwidth=4 tabstop=4 softtabstop=4
@@ -177,3 +182,6 @@ let b:delimitMate_matchpairs = "(:),[:],{:}"
 
 " disable polyglot markdown
 let g:polyglot_disabled = ['markdown']
+
+" use default mapping for camelCaseMotion
+let g:camelcasemotion_key = '<leader>'
