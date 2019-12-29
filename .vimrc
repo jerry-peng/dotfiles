@@ -20,6 +20,8 @@ endfunction
 call plug#begin()
 Plug '/usr/local/opt/fzf'
 Plug 'dense-analysis/ale'
+Plug 'vim-scripts/argtextobj.vim'
+Plug 'bkad/CamelCaseMotion'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'raimondi/delimitmate'
 Plug 'mattn/emmet-vim'
@@ -35,11 +37,13 @@ Plug 'junegunn/vim-easy-align'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+Plug 'michaeljsmith/vim-indent-object'
 Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
+Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
 
