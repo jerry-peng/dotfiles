@@ -18,14 +18,12 @@ function! BuildComposer(info)
 endfunction
 
 call plug#begin()
-Plug '/usr/local/opt/fzf'
 Plug 'dense-analysis/ale'
 Plug 'vim-scripts/argtextobj.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'raimondi/delimitmate'
 Plug 'mattn/emmet-vim'
-Plug 'junegunn/fzf.vim'
 Plug 'yggdroot/indentline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'majutsushi/tagbar'
