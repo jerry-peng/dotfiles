@@ -27,7 +27,6 @@ Plug 'mattn/emmet-vim'
 Plug 'yggdroot/indentline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'majutsushi/tagbar'
-Plug 'vim-scripts/taglist.vim'
 Plug 'ajh17/VimCompletesMe'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
