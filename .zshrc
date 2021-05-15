@@ -46,3 +46,7 @@ export CPPFLAGS="-I/usr/local/opt/llvm/include"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 export PATH
+
+# fzf
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
