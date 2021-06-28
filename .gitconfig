@@ -1,0 +1,5 @@
+[user]
+	name = Jerry Peng
+	email = jerrypeng0112@hotmail.com
+[core]
+	excludesfile = ~/.gitignore
