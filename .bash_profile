@@ -35,6 +35,6 @@ export LDFLAGS="-L /usr/local/opt/llvm/lib"
 export CPPFLAGS="-I/usr/local/opt/llvm/include"
 
 # Cargo PATH
-export PATH="$HOME/.cargo/bin:$PATH"
 
 export PATH
+. "$HOME/.cargo/env"
