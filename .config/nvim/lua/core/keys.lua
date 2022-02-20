@@ -110,6 +110,24 @@ return {
             ["<leader>fhc"] = { '<cmd>lua require("telescope.builtin").command_history()<CR>' },
             ["<leader>fhs"] = { '<cmd>lua require("telescope.builtin").search_history()<CR>' },
 
+            gD = { "<cmd>lua vim.lsp.buf.declaration()<CR>" },
+            gd = { "<cmd>lua vim.lsp.buf.definition()<CR>" },
+            gr = { "<cmd>lua vim.lsp.buf.references()<CR>" },
+            K = { "<cmd>lua vim.lsp.buf.hover()<CR>" },
+            gi = { "<cmd>lua vim.lsp.buf.implementation()<CR>" },
+            ["<leader>wa"] = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>" },
+            ["<leader>wr"] = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>" },
+            ["<leader>wf"] = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>" },
+            ["<leader>lt"] = { "<cmd>lua vim.lsp.buf.type_definition()<CR>" },
+            ["<leader>ls"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>" },
+            ["<leader>lr"] = { "<cmd>lua vim.lsp.buf.rename()<CR>" },
+            ["<leader>lc"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>" },
+            ["<leader>lf"] = { "<cmd>lua vim.lsp.buf.formatting_seq_sync()<CR>" },
+            ["<leader>dd"] = { "<cmd>lua vim.diagnostic.open_float()<CR>" },
+            ["<leader>dq"] = { "<cmd>lua vim.diagnostic.setqflist()<CR>" },
+            ["[d"] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>" },
+            ["]d"] = { "<cmd>lua vim.diagnostic.goto_next()<CR>" },
+
             ["<leader>q"] = { '<cmd>lua require"core.utils".close_float_windows()<CR>' },
 
             ["<leader>rr"] = { '<Esc><cmd>lua require("telescope").extensions.refactoring.refactors()<CR>' },
@@ -288,28 +306,6 @@ return {
             ["<leader>pf"] = "@function.outer",
             ["<leader>pc"] = "@class.outer",
         },
-    },
-    lsp = {
-        gD = "<cmd>lua vim.lsp.buf.declaration()<CR>",
-        gd = "<cmd>lua vim.lsp.buf.definition()<CR>",
-        gr = "<cmd>lua vim.lsp.buf.references()<CR>",
-        K = "<cmd>lua vim.lsp.buf.hover()<CR>",
-        gi = "<cmd>lua vim.lsp.buf.implementation()<CR>",
-
-        ["<leader>wa"] = "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>",
-        ["<leader>wr"] = "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>",
-        ["<leader>wf"] = "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
-
-        ["<leader>lt"] = "<cmd>lua vim.lsp.buf.type_definition()<CR>",
-        ["<leader>ls"] = "<cmd>lua vim.lsp.buf.signature_help()<CR>",
-        ["<leader>lr"] = "<cmd>lua vim.lsp.buf.rename()<CR>",
-        ["<leader>lc"] = "<cmd>lua vim.lsp.buf.code_action()<CR>",
-        ["<leader>lf"] = "<cmd>lua vim.lsp.buf.formatting_seq_sync()<CR>",
-
-        ["<leader>dd"] = "<cmd>lua vim.diagnostic.open_float()<CR>",
-        ["<leader>dq"] = "<cmd>lua vim.diagnostic.setqflist()<CR>",
-        ["[d"] = "<cmd>lua vim.diagnostic.goto_prev()<CR>",
-        ["]d"] = "<cmd>lua vim.diagnostic.goto_next()<CR>",
     },
     lsp_signature = {
         toggle = "<C-s>",

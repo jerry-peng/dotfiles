@@ -88,17 +88,8 @@ M.config = function()
         toggle_key = keys.lsp_signature.toggle,
     })
 
-    -- set buffer key mappings on attach
-    local on_attach = function(_, bufnr)
-        local function buf_set_keymap(...)
-            vim.api.nvim_buf_set_keymap(bufnr, ...)
-        end
-        local opts = { noremap = true, silent = true }
-
-        for key, cmd in pairs(keys.lsp) do
-            buf_set_keymap("n", key, cmd, opts)
-        end
-    end
+    -- function executed when servers are attached
+    local on_attach = function(_, _) end
 
     -- setup each language server
     for _, lsp in ipairs(servers) do
@@ -135,7 +126,7 @@ M.config = function()
             null_ls.builtins.formatting.fixjson,
             null_ls.builtins.formatting.isort,
             null_ls.builtins.formatting.prettier.with({
-                extra_filetypes = { "markdown", "toml" },
+                extra_filetypes = { "toml" },
             }),
             null_ls.builtins.formatting.rustfmt,
             null_ls.builtins.formatting.shfmt,
