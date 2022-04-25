@@ -1,13 +1,8 @@
 M = {}
 
 M.config = function()
-    vim.g.nvim_tree_indent_markers = 1
-    vim.g.nvim_tree_git_hl = 1
-    vim.g.nvim_tree_highlight_opened_files = 1
-    vim.g.nvim_tree_group_empty = 1
-    vim.g.nvim_tree_disable_window_picker = 1
-    vim.g.nvim_tree_respect_buf_cwd = 1
     require("nvim-tree").setup({
+
         hijack_cursor = true,
         update_cwd = true,
         diagnostics = {
@@ -19,6 +14,13 @@ M.config = function()
         view = {
             auto_resize = true,
         },
+
+        indent_markers = true,
+        git_hl = true,
+        highlight_opened_files = true,
+        group_empty = true,
+        disable_window_picker = true,
+        respect_buf_cwd = true
     })
 end
 

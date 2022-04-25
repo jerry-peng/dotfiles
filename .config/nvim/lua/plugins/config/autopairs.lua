@@ -1,7 +1,8 @@
+local npairs = require("nvim-autopairs")
+
 local M = {}
 
 M.config = function()
-    local npairs = require("nvim-autopairs")
     npairs.setup({
         fast_wrap = {},
     })

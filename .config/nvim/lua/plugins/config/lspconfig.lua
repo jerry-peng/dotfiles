@@ -81,12 +81,10 @@ end
 
 M.config = function()
     -- load snippets
-    require("luasnip.loaders.from_vscode").load()
-
-    -- show function signature
-    require("lsp_signature").setup({
-        toggle_key = keys.lsp_signature.toggle,
+    luasnip.config.setup({
+        region_check_events = 'InsertEnter'
     })
+    require("luasnip.loaders.from_vscode").load()
 
     -- function executed when servers are attached
     local on_attach = function(_, _) end
@@ -167,7 +165,7 @@ M.config = function()
             -- remove default `<C-y>` mapping.
             [keys.cmp.disable_default] = cmp.config.disable,
             [keys.cmp.abort] = cmp.mapping(cmp.mapping.abort(), { "i", "s", "c" }),
-            -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+            -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items
             [keys.cmp.select] = cmp.mapping.confirm({ select = true }),
             [keys.cmp.prev_item] = cmp.mapping.select_prev_item(),
             [keys.cmp.next_item] = cmp.mapping.select_next_item(),

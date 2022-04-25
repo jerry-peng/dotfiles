@@ -1,5 +1,4 @@
 -- Configs
-vim.lsp.set_log_level("debug")
 require("core.setup")
 require("plugins")
 require("core.options")

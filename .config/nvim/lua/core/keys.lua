@@ -122,7 +122,7 @@ return {
             ["<leader>ls"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>" },
             ["<leader>lr"] = { "<cmd>lua vim.lsp.buf.rename()<CR>" },
             ["<leader>lc"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>" },
-            ["<leader>lf"] = { "<cmd>lua vim.lsp.buf.formatting_seq_sync()<CR>" },
+            ["<leader>lf"] = { "<cmd>lua vim.lsp.buf.formatting_seq_sync({}, 10000)<CR>" },
             ["<leader>dd"] = { "<cmd>lua vim.diagnostic.open_float()<CR>" },
             ["<leader>dq"] = { "<cmd>lua vim.diagnostic.setqflist()<CR>" },
             ["[d"] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>" },
