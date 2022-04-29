@@ -316,7 +316,6 @@ return {
         open_complete = "<C-z>",
         disable_default = "<C-y>",
         abort = "<C-e>",
-        select = "<CR>",
         prev_item = "<C-p>",
         next_item = "<C-n>",
         tab = "<Tab>",
