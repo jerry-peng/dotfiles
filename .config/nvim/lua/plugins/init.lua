@@ -91,7 +91,12 @@ return require("packer").startup(function(use)
     })
 
     -- search
-    use("kevinhwang91/nvim-hlslens")
+    use({
+        "kevinhwang91/nvim-hlslens",
+        config = function()
+            require("plugins.config.hlslens").config()
+        end,
+    })
 
     -- theme
     use({
@@ -234,12 +239,14 @@ return require("packer").startup(function(use)
             require("plugins.config.sniprun").config()
         end,
     })
-    use({
-        "rcarriga/vim-ultest",
-        requires = "vim-test/vim-test",
-        after = "vim-unimpaired",
-        run = ":UpdateRemotePlugins",
-    })
+    use {
+        "nvim-neotest/neotest",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+            "antoinemadec/FixCursorHold.nvim"
+        }
+    }
 
     -- DAP
     use({

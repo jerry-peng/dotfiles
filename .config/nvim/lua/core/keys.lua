@@ -27,7 +27,7 @@ return {
             -- override ? to use sane regexes (not used since we have auto-completion)
             ["?"] = { "/\\v" },
 
-            -- don't jump when using *, ena}les hlslens
+            -- don't jump when using *, enables hlslens
             ["*"] = { '*<C-o><bar><cmd>lua require("hlslens").start()<CR>' },
 
             -- unmap `s` for sandwich

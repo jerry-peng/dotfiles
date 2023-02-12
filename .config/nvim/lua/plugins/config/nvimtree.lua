@@ -2,25 +2,32 @@ M = {}
 
 M.config = function()
     require("nvim-tree").setup({
-
-        hijack_cursor = true,
-        update_cwd = true,
+        prefer_startup_root = true,
+        sync_root_with_cwd = true,
+        reload_on_bufenter = true,
+        respect_buf_cwd = true,
+        update_focused_file = {
+            enable = true,
+            update_root = true,
+        },
         diagnostics = {
             enable = true,
         },
-        update_focused_file = {
+        git = {
             enable = true,
         },
-        view = {
-            auto_resize = true,
+        filesystem_watchers = {
+            enable = true,
         },
-
-        indent_markers = true,
-        git_hl = true,
-        highlight_opened_files = true,
-        group_empty = true,
-        disable_window_picker = true,
-        respect_buf_cwd = true
+        renderer = {
+            add_trailing = true,
+            group_empty = true,
+            highlight_git = true,
+            highlight_modified = "icon",
+            indent_markers = {
+                enable = true,
+            },
+        },
     })
 end
 

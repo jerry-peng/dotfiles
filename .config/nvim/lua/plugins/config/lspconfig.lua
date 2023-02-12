@@ -98,7 +98,7 @@ M.config = function()
 
         local opts = setup_func()
         if opts.capabilities == nil then
-            local capabilities = require("cmp_nvim_lsp").update_capabilities(
+            local capabilities = require("cmp_nvim_lsp").default_capabilities(
                 vim.lsp.protocol.make_client_capabilities()
             )
 
