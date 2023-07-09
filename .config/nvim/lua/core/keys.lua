@@ -114,7 +114,7 @@ return {
             gd = { "<cmd>lua vim.lsp.buf.definition()<CR>" },
             gr = { "<cmd>lua vim.lsp.buf.references()<CR>" },
             K = { "<cmd>lua vim.lsp.buf.hover()<CR>" },
-            gi = { "<cmd>lua vim.lsp.buf.implementation()<CR>" },
+            gi = { "<cmd>lua vim.lsp.buf.implementation()<CR>" }, -- in conflict with default gi
             ["<leader>wa"] = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>" },
             ["<leader>wr"] = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>" },
             ["<leader>wf"] = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>" },

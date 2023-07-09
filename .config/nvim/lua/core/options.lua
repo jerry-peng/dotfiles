@@ -3,43 +3,53 @@ local opt = vim.opt
 local api = vim.api
 
 vim.g.mapleader = " " -- leader key
-vim.g.did_load_filetypes = 1 -- Do not source the default filetype.vim
+vim.g.did_load_filetypes = 1 -- do not source the default filetype.vim
 
 -- Basic settings
 opt.encoding = "utf-8"
 opt.backspace = "indent,eol,start" -- backspace works on every char in insert mode
-opt.completeopt = "menu,menuone,noselect"
-opt.shell = "/usr/local/bin/zsh"
-opt.dictionary = "/usr/share/dict/words"
+opt.completeopt = "menu,menuone,noselect" -- completion options: show popup menu when there are selections, and do not select a match in menu
+opt.shell = "/usr/local/bin/zsh" -- zsh as default shell
+opt.dictionary = "/usr/share/dict/words" -- file path to spell check dictionary
 opt.startofline = true -- cursor is moved to first non-blank char when using some move commands
-opt.hidden = true -- hidden buffer
-opt.path = opt.path + "~,.,**" -- path searched when using various find commands
-opt.iskeyword = opt.iskeyword + "-"
+opt.hidden = true -- opening a new file when current buffer has unsaved changes causes current buffer file to be hidden instead of closed
+opt.path = opt.path + "~,.,**" -- path searched when using various find commands (** means every file recursively in current directory)
+opt.iskeyword = opt.iskeyword + "-" -- append "-" as keyword, which are recognized by many commands such as "w", "*", e.g. "a-b" is counted as 1 word instead of 3
 opt.autoread = true -- automatically load file without prompt if file changes
-opt.updatetime = 250
+opt.updatetime = 250 -- the amount of time in ms to trigger CursorHold event
 
 -- Mapping waiting time
+-- For more info: https://vi.stackexchange.com/questions/24925/usage-of-timeoutlen-and-ttimeoutlen
 opt.timeout = true -- mapping sequence timeout
 opt.ttimeout = true -- key code timeout
-opt.timeoutlen = 750
-opt.ttimeoutlen = 5
+opt.timeoutlen = 750 -- the amount of time to wait after each keystroke
+opt.ttimeoutlen = 5 -- the amount of time to wait for key code sequences
 
 -- Display
 opt.termguicolors = true -- emit true (24-bit) color
 opt.showmatch = true -- show matching brackets
-opt.lazyredraw = true --
+opt.lazyredraw = true -- buffer screen updates
 opt.scrolloff = 3 -- always show 3 rows from edge of the screen
 opt.sidescrolloff = 5 -- always show 5 columns from edge of the screen
-opt.synmaxcol = 300 -- stop syntax highlight after x'th column for performance
+opt.synmaxcol = 180 -- stop syntax highlight after x'th column for performance
 opt.laststatus = 2 -- always show status line
-opt.linebreak = true -- wrap line at character in 'breakat'
+opt.linebreak = true -- wrap line at character in 'breakat' option
 opt.showbreak = "↳  " -- show wrap character
-opt.listchars = { eol = "↲", tab = "▶ ", trail = "•", precedes = "«", extends = "»", nbsp = "␣", space = " " }
-opt.cursorline = true
+opt.listchars = {
+    eol = "↲",
+    tab = "▶ ",
+    trail = "•",
+    precedes = "«",
+    extends = "»",
+    nbsp = "␣",
+    space = " "
+}
+opt.cursorline = true -- highlight cursor line
+opt.virtualedit = "block" -- allow block selection in visual block mode past EOL
 
 -- Side columns
 opt.modelines = 0 -- disable for security reasons
-opt.number = true -- line number on the left
+opt.number = true -- enable line number
 opt.relativenumber = true -- enable relative number
 
 -- Search
@@ -54,9 +64,9 @@ opt.matchtime = 2 -- delay before showing matching paren (tenth of a second)
 opt.mps = opt.mps + "<:>" -- Add <> match pair
 
 -- Indentations
-opt.autoindent = true
-opt.smartindent = true
-opt.expandtab = true
+opt.autoindent = true -- copy indent from current line when starting new line
+opt.smartindent = true -- smart autoindent when starting a new line
+opt.expandtab = true -- use appropriate number of spaces to insert a <Tab>
 opt.tabstop = 4
 opt.shiftwidth = 4
 opt.softtabstop = 4
@@ -98,7 +108,7 @@ opt.splitright = true -- split window right
 -- Fold
 opt.foldlevel = 99 -- prevent folding when opening files
 opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldexpr = "nvim_treesitter#foldexpr()" -- use treesitter fold
 
 -- Disable builtin plugins
 local disabled_built_ins = {

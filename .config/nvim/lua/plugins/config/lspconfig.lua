@@ -42,7 +42,7 @@ local servers = {
     "kotlin_language_server",
     "pyright",
     "rust_analyzer",
-    "sumneko_lua",
+    "lua_ls",
     "tsserver",
 }
 
@@ -50,7 +50,7 @@ local lsp_opt_setup = {
     default = function()
         return {}
     end,
-    sumneko_lua = function()
+    lua_ls = function()
         local runtime_path = vim.split(package.path, ";")
         table.insert(runtime_path, "lua/?.lua")
         table.insert(runtime_path, "lua/?/init.lua")
