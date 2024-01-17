@@ -1,9 +1,7 @@
 local HOME = os.getenv("HOME")
 local opt = vim.opt
-local api = vim.api
 
 vim.g.mapleader = " " -- leader key
-vim.g.did_load_filetypes = 1 -- do not source the default filetype.vim
 
 -- Basic settings
 opt.encoding = "utf-8"
@@ -17,6 +15,7 @@ opt.path = opt.path + "~,.,**" -- path searched when using various find commands
 opt.iskeyword = opt.iskeyword + "-" -- append "-" as keyword, which are recognized by many commands such as "w", "*", e.g. "a-b" is counted as 1 word instead of 3
 opt.autoread = true -- automatically load file without prompt if file changes
 opt.updatetime = 250 -- the amount of time in ms to trigger CursorHold event
+opt.mouse = "" -- disable mouse control
 
 -- Mapping waiting time
 -- For more info: https://vi.stackexchange.com/questions/24925/usage-of-timeoutlen-and-ttimeoutlen
@@ -26,7 +25,7 @@ opt.timeoutlen = 750 -- the amount of time to wait after each keystroke
 opt.ttimeoutlen = 5 -- the amount of time to wait for key code sequences
 
 -- Display
-opt.termguicolors = true -- emit true (24-bit) color
+opt.termguicolors = true
 opt.showmatch = true -- show matching brackets
 opt.lazyredraw = true -- buffer screen updates
 opt.scrolloff = 3 -- always show 3 rows from edge of the screen
@@ -106,9 +105,10 @@ opt.splitbelow = true -- split window below
 opt.splitright = true -- split window right
 
 -- Fold
-opt.foldlevel = 99 -- prevent folding when opening files
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()" -- use treesitter fold
+opt.foldenable = false -- disable folding at startup
+opt.foldlevel = 99 -- prevent folding when opening files
 
 -- Disable builtin plugins
 local disabled_built_ins = {

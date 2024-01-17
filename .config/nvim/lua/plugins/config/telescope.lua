@@ -4,12 +4,25 @@ local action_layout = require("telescope.actions.layout")
 local previewers = require("telescope.previewers")
 local trouble = require("trouble.providers.telescope")
 local Job = require("plenary.job")
-local keys = require("core.keys")
+local keys = require("core.keymaps").plugins.telescope
 
 local M = {}
 
+--[[
+- general
+    - quit insert mode
+    - clear prompt
+    - delete buffer
+    - Toggle file preview
+    - mapping to cycle previewer for git commits to show full message
+- picker
+    - file and text search in hidden files and dir
+    - remove ./ from `fd` results
+    - rg remove indentation
+]]
+
 M.config = function()
-    local new_maker = function(filepath, bufnr, opts)
+    local previewer_maker = function(filepath, bufnr, opts)
         opts = opts or {}
         filepath = vim.fn.expand(filepath)
         vim.loop.fs_stat(filepath, function(_, stat)
@@ -43,32 +56,31 @@ M.config = function()
         defaults = {
             mappings = {
                 n = {
-                    [keys.telescope.toggle_preview] = action_layout.toggle_preview,
-                    [keys.telescope.close] = actions.close,
-                    [keys.telescope.open_with_trouble] = trouble.open_with_trouble,
+                    [keys.toggle_preview] = action_layout.toggle_preview,
+                    [keys.close] = actions.close,
+                    [keys.open_with_trouble] = trouble.open_with_trouble,
+                    ["cd"] = function(prompt_bufnr)
+                        local selection = require("telescope.actions.state").get_selected_entry()
+                        local dir = vim.fn.fnamemodify(selection.path, ":p:h")
+                        require("telescope.actions").close(prompt_bufnr)
+                        -- Depending on what you want put `cd`, `lcd`, `tcd`
+                        vim.cmd(string.format("silent lcd %s", dir))
+                    end
                 },
                 i = {
-                    [keys.telescope.toggle_preview] = action_layout.toggle_preview,
-                    [keys.telescope.open_with_trouble] = trouble.open_with_trouble,
+                    ["<c-d>"] = actions.delete_buffer,
+                    ["<C-s>"] = actions.cycle_previewers_next,
+                    [keys.toggle_preview] = action_layout.toggle_preview,
+                    [keys.open_with_trouble] = trouble.open_with_trouble,
                 },
             },
-            vimgrep_arguments = {
-                "rg",
-                "--color=never",
-                "--no-heading",
-                "--with-filename",
-                "--line-number",
-                "--column",
-                "--smart-case",
-                "--trim",
-            },
             scroll_strategy = "limit",
-            buffer_previewer_maker = new_maker,
+            buffer_previewer_maker = previewer_maker,
         },
         extensions = {
             fzf_native = {
                 fuzzy = true,
-                override_generic_sorter = false,
+                override_generic_sorter = true,
                 override_file_sorter = true,
                 case_mode = "smart_case",
             },

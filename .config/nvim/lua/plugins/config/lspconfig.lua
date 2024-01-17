@@ -2,7 +2,7 @@ local cmp = require("cmp")
 local luasnip = require("luasnip")
 local nvim_lsp = require("lspconfig")
 local null_ls = require("null-ls")
-local keys = require("core.keys")
+local keys = require("core.keymaps").plugins
 
 local M = {}
 
@@ -131,6 +131,7 @@ M.config = function()
             null_ls.builtins.formatting.shellharden,
             null_ls.builtins.formatting.stylua,
             null_ls.builtins.code_actions.eslint_d,
+            null_ls.builtins.code_actions.gitsigns
         },
     })
 
@@ -208,8 +209,8 @@ M.config = function()
         sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
     })
 
-    -- insert function brackets when auto-completing functions
-    cmp.event:on("confirm_done", require("nvim-autopairs.completion.cmp").on_confirm_done({ map_char = { tex = "" } }))
+    -- insert function paranthesis when auto-completing functions
+    cmp.event:on("confirm_done", require("nvim-autopairs.completion.cmp").on_confirm_done())
 end
 
 return M

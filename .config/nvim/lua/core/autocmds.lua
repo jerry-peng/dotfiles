@@ -27,3 +27,6 @@ vim.cmd([[au BufWinEnter * set formatoptions=cqnj]])
 
 -- attack autocompletion for dap REPL
 vim.cmd([[au FileType dap-repl lua require('dap.ext.autocompl').attach()]])
+
+-- Fugitive TODO
+--autocmd BufReadPost fugitive://* set bufhidden=delete

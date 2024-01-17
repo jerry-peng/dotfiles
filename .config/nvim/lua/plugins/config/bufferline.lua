@@ -21,8 +21,6 @@ M.config = function()
             end,
         },
     })
-    local keys = require("core.keys").after.bufferline
-    require("core.mappings").register(keys)
 end
 
 return M

@@ -1,11 +1,9 @@
-local keys = require("core.keys")
-
 local M = {}
 
 M.config = function()
     require("lsp_signature").setup({
         hint_prefix = "◈ ",
-        toggle_key = keys.lsp_signature.toggle
+        toggle_key = require("core.keymaps").plugins.lsp_signature.toggle
     })
 end
 

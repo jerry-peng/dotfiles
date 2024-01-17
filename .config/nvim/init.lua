@@ -1,6 +1,21 @@
--- Configs
+--[[
+-- Neovim top level configuration
+--]]
+
+require("core.bootstrap")
 require("core.setup")
-require("plugins")
+
+-- load plugins using lazy.nvim
+require("lazy").setup(
+    "plugins",
+    {
+        -- Disable change detection notification
+        change_detection = {
+            notify = false,
+        }
+    }
+)
+
 require("core.options")
-require("core.mappings"):register_default()
+require("core.keymaps"):register()
 require("core.autocmds")
