@@ -1,11 +1,9 @@
 return {
-    -- basic utilities
-    "nathom/filetype.nvim",
+    -- utilities
     "christoomey/vim-tmux-navigator",
-
-    -- other utilities
     "tpope/vim-repeat",
     "tpope/vim-unimpaired",
+    "tpope/vim-sleuth",
 
     -- git
     "tpope/vim-fugitive",
@@ -28,12 +26,11 @@ return {
     {
         "monaqa/dial.nvim",
         dependencies = {
-            "nvim-lua/plenary.nvim"
+            "nvim-lua/plenary.nvim",
         },
         config = function()
             require("plugins.config.dial").config()
         end,
-        lazy = true
     },
     {
         "numToStr/Comment.nvim",
@@ -57,25 +54,22 @@ return {
         event = "VeryLazy",
         config = function()
             require("nvim-surround").setup()
-        end
+        end,
     },
     {
         "windwp/nvim-autopairs",
-        dependencies = {
-        },
+        dependencies = {},
         config = function()
             require("plugins.config.autopairs").config()
         end,
     },
-
 
     -- motion
     {
         "chrisgrieser/nvim-spider",
         config = function()
             require("spider").setup()
-        end
-
+        end,
     },
     {
         "phaazon/hop.nvim",
@@ -113,7 +107,7 @@ return {
             "HiPhish/rainbow-delimiters.nvim", -- Rainbow delimiters for nested bracces
         },
         config = function()
-            require("plugins.config.indent_blankline").config()
+            require("plugins.config.indent-blankline").config()
         end,
     },
     {
@@ -129,6 +123,7 @@ return {
         dependencies = {
             "kyazdani42/nvim-web-devicons",
             "moll/vim-bbye", -- delete buffer without closing window
+            "maxmx03/solarized.nvim", -- Load after color scheme
         },
         config = function()
             require("plugins.config.bufferline").config()
@@ -145,7 +140,7 @@ return {
     -- telescope
     {
         "nvim-telescope/telescope.nvim",
-        branch = '0.1.x',
+        branch = "0.1.x",
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-telescope/telescope-fzf-native.nvim",
@@ -158,6 +153,7 @@ return {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "make",
     },
+    "stevearc/dressing.nvim",
 
     -- treesitter
     {
@@ -169,7 +165,6 @@ return {
     },
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
-        after = "vim-unimpaired",
     },
     {
         "romgrk/nvim-treesitter-context",
@@ -185,29 +180,88 @@ return {
         end,
     },
     {
-        "ThePrimeagen/refactoring.nvim",
+        "ckolkey/ts-node-action",
+        dependencies = {
+            "nvim-treesitter",
+        },
         config = function()
-            require("refactoring").setup({})
+            require("ts-node-action").setup()
+        end,
+    },
+    {
+        "ThePrimeagen/refactoring.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        config = function()
+            require("refactoring").setup()
         end,
     },
 
-    -- LSP
+    -- LSP/linters/formatters
     {
-        "neovim/nvim-lspconfig",
+        "williamboman/mason.nvim",
+        config = function()
+            require("mason").setup()
+        end,
+    },
+    {
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+        dependencies = {
+            "williamboman/mason.nvim",
+        },
+        config = function()
+            require("plugins.config.mason-tools").config()
+        end,
+    },
+    {
+        "nvimtools/none-ls.nvim",
+        dependencies = {
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+            "plenary.nvim",
+        },
+        config = function()
+            require("plugins.config.null-ls").config()
+        end,
+    },
+    {
+        "stevearc/conform.nvim",
+        dependencies = {
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+        },
+        config = function()
+            require("plugins.config.conform").config()
+        end,
+    },
+    {
+        "mfussenegger/nvim-lint",
+        dependencies = {
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+        },
+        config = function()
+            require("plugins.config.nvim-lint").config()
+        end,
+    },
+    {
+        "williamboman/mason-lspconfig.nvim",
+        dependencies = {
+            "WhoIsSethDaniel/mason-tool-installer.nvim",
+            "neovim/nvim-lspconfig",
+        },
         config = function()
             require("plugins.config.lspconfig").config()
         end,
     },
     "arkav/lualine-lsp-progress",
+
+    -- Completion
+    "onsails/lspkind.nvim",
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
     "hrsh7th/cmp-cmdline",
     "hrsh7th/nvim-cmp",
-    {
-        "jose-elias-alvarez/null-ls.nvim",
-        require = "plenary.nvim",
-    },
     {
         "folke/trouble.nvim",
         config = function()
@@ -217,7 +271,7 @@ return {
     {
         "ray-x/lsp_signature.nvim",
         config = function()
-            require("plugins.config.lsp_signature").config()
+            require("plugins.config.lsp-signature").config()
         end,
     },
 
@@ -225,7 +279,7 @@ return {
     {
         "L3MON4D3/LuaSnip",
         version = "v2.*",
-        build = "make install_jsregexp"
+        build = "make install_jsregexp",
     },
     "saadparwaiz1/cmp_luasnip",
     "rafamadriz/friendly-snippets",
@@ -254,6 +308,7 @@ return {
             require("plugins.config.dap").config()
         end,
     },
+    "nvim-dap-ui",
     "nvim-telescope/telescope-dap.nvim",
     "mfussenegger/nvim-dap-python",
 }

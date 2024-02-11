@@ -40,16 +40,19 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # Node PATH for global packages
 export NODE_PATH="/usr/local/lib/node_modules"
 
-# Base PATH
-export PATH="/usr/local/opt/python/libexec/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+# PATH
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="/usr/local/opt/ruby/bin:$PATH" # Ruby
+export PATH="/usr/local/opt/python/libexec/bin:$PATH" # Python
+export PATH="/usr/local/opt/llvm/bin:$PATH" # LLVM
+export PATH="$HOME/.cargo/bin:$PATH" # Cargo
 
 # llvm PATH and FLAG settings
-export PATH="/usr/local/opt/llvm/bin:$PATH"
 export LDFLAGS="-L /usr/local/opt/llvm/lib"
 export CPPFLAGS="-I/usr/local/opt/llvm/include"
 
-# Cargo PATH
-export PATH="$HOME/.cargo/bin:$PATH"
+# Add terminfo directory to use tmux-color256 (not needed for MacOS Sonoma)
+export TERMINFO_DIRS=$TERMINFO_DIRS:$HOME/.local/share/terminfo
 
 # fzf
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'

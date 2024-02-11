@@ -262,9 +262,6 @@ Plug 'yggdroot/indentline'
 
 " syntax/auto-completion
 Plug 'sheerun/vim-polyglot'
-" Plug 'dense-analysis/ale'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'majutsushi/tagbar'
 
 " motion
 Plug 'vim-scripts/argtextobj.vim'
@@ -299,7 +296,3 @@ Plug 'junegunn/vim-easy-align'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 
 call plug#end()
-
-" Solarized light
-" set background=light
-" colorscheme solarized

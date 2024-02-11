@@ -87,7 +87,6 @@ M.config = function()
         },
     })
     telescope.load_extension("fzf")
-    telescope.load_extension("refactoring")
     telescope.load_extension("dap")
 end
 

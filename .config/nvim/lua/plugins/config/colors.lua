@@ -22,8 +22,8 @@ local colors = {
 }
 
 M.config = function()
-    vim.cmd("colorscheme solarized")
     vim.opt.background = "light"
+    vim.cmd("colorscheme solarized")
 end
 
 M.colors = colors

@@ -41,7 +41,7 @@ opt.listchars = {
     precedes = "«",
     extends = "»",
     nbsp = "␣",
-    space = " "
+    space = " ",
 }
 opt.cursorline = true -- highlight cursor line
 opt.virtualedit = "block" -- allow block selection in visual block mode past EOL

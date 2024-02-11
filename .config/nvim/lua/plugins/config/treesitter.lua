@@ -43,16 +43,17 @@ M.config = function()
                 peek_definition_code = keys.plugins.textobj.peek_definition_code,
             },
         },
+
         -- nvim-ts-autotag
         autotag = {
             enable = true,
         },
+
         -- nvim-treesitter-endwise
         endwise = {
             enable = true,
         },
     })
-    vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 end
 
 return M

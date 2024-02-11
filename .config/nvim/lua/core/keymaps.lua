@@ -214,6 +214,7 @@ mappings["default"]["x"] = {
     ["<leader>ri"] = { '<Esc><Cmd>lua require("refactoring").refactor("Inline Variable")<CR>' },
 
     ["<leader>ss"] = { ":'<,'>SnipRun<CR>" },
+    ["<leader>lc"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>" },
 }
 
 -- i-mode
