@@ -34,9 +34,6 @@ export PAGER=less
 # Command Alias
 alias ls="gls --color"
 
-# Git alias for dotfiles
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-
 # Node PATH for global packages
 export NODE_PATH="/usr/local/lib/node_modules"
 
