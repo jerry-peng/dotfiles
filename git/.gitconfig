@@ -1,5 +1,5 @@
 [user]
-    name = "Jerry Peng"
+    name = ""
     email = ""
 [core]
     excludesfile = ~/.gitignore
