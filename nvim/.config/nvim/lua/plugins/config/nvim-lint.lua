@@ -1,7 +1,7 @@
 local M = {}
 
 M.config = function()
-    require("lint").linters_by_ft = {
+    local linters_by_ft = {
         c = { "cpplint" },
         cpp = { "cpplint" },
         python = { "ruff" },
@@ -24,6 +24,10 @@ M.config = function()
         json = { "jsonlint" },
         markdown = { "markdownlint" },
     }
+    for _, linters in pairs(linters_by_ft) do
+        table.insert(linters, "typos")
+    end
+    require("lint").linters_by_ft = linters_by_ft
     vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave", "BufWritePost" }, {
         callback = function()
             require("lint").try_lint()

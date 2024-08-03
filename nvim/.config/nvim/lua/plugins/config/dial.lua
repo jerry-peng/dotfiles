@@ -64,8 +64,8 @@ M.config = function()
                 only_valid = true,
                 word = false,
             }),
-            augend.date.alias["%H:%M:%S"], -- Bugged and need to be fixed upstream
-            augend.date.alias["%H:%M"], -- Bugged and need to be fixed upstream
+            augend.date.alias["%H:%M:%S"],
+            augend.date.alias["%H:%M"],
             augend.hexcolor.new({
                 case = "lower",
             }),
@@ -80,7 +80,7 @@ M.config = function()
             augend.constant.new({
                 elements = { "&&", "||" },
                 word = false,
-                cyclic = true,
+                cyclic = true, -- "&&" -> "||" -> "&&"
             }),
         },
     })

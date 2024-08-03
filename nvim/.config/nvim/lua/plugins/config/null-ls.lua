@@ -28,10 +28,6 @@ M.config = function()
             }),
             -- default action to cycle format/value in treesitter node
             null_ls.builtins.code_actions.ts_node_action,
-            -- code actions to fix English prose
-            null_ls.builtins.code_actions.proselint,
-            -- code actions to fix ESLint issues or broken rules
-            null_ls.builtins.code_actions.eslint_d,
         },
     })
 end

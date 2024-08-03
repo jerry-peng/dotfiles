@@ -3,15 +3,16 @@ local M = {}
 
 M.config = function()
     require("sniprun").setup({
-        repl_enable = { "Python3_original", "Lua_original" },
+        selected_interpreters = { "Python3_fifo" },
+        repl_enable = { "Python3_fifo", "Lua_original" },
         display = {
             "TerminalWithCode",
         },
         snipruncolors = {
-            SniprunVirtualTextOk = { bg = colors.cyan[0], fg = colors.base0[0] },
-            SniprunFloatingWinOk = { bg = colors.cyan[0], fg = colors.base0[0] },
-            SniprunVirtualTextErr = { bg = colors.orange[0], fg = colors.base0[0] },
-            SniprunFloatingWinErr = { bg = colors.orange[0], fg = colors.base0[0] },
+            SniprunVirtualTextOk = { bg = colors.cyan, fg = colors.base0 },
+            SniprunFloatingWinOk = { bg = colors.cyan, fg = colors.base0 },
+            SniprunVirtualTextErr = { bg = colors.orange, fg = colors.base0 },
+            SniprunFloatingWinErr = { bg = colors.orange, fg = colors.base0 },
         },
     })
 end

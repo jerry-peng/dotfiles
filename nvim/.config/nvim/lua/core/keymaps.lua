@@ -1,68 +1,110 @@
+local gitsigns = require("gitsigns")
+
 local mappings = {}
-mappings["default"] = {}
-mappings["plugins"] = {}
+mappings["direct"] = {}
+mappings["passthrough"] = {}
 
--- default mode
-mappings["default"][""] = {
-    fs = { '<cmd>lua require"hop".hint_char1()<CR>' },
-    ff = { '<cmd>lua require"hop".hint_char2()<CR>' },
-    fl = { '<cmd>lua require"hop".hint_lines_skip_whitespace()<CR>' },
-    fw = { '<cmd>lua require"hop".hint_words()<CR>' },
-    fp = { '<cmd>lua require"hop".hint_patterns()<CR>' },
-    [",w"] = { "<Plug>CamelCaseMotion_w", { noremap = false } },
-    [",b"] = { "<Plug>CamelCaseMotion_b", { noremap = false } },
-    [",e"] = { "<Plug>CamelCaseMotion_e", { noremap = false } },
-    [",ge"] = { "<Plug>CamelCaseMotion_ge", { noremap = false } },
-}
+-- normal/visual/select/operator-pending
+mappings["direct"][""] = {}
 
--- n-mode
-mappings["default"]["n"] = {
+-- normal
+mappings["direct"]["n"] = {
     -- more natural movement with wrap on
-    j = { 'v:count == 0 ? "gj" : "j"', { expr = true } },
-    k = { 'v:count == 0 ? "gk" : "k"', { expr = true } },
+    j = { [[v:count == 0 ? "gj" : "j"]], { expr = true } },
+    k = { [[v:count == 0 ? "gk" : "k"]], { expr = true } },
 
     -- H/L move to start/end of line
     H = { "^" },
     L = { "$" },
 
     -- override ? to use sane regexes (not used since we have auto-completion)
-    ["?"] = { "/\\v" },
+    ["/"] = { "/\\v" },
 
-    -- don't jump when using *, enables hlslens
-    ["*"] = { '*<C-o><bar><cmd>lua require("hlslens").start()<CR>' },
-
-    ["<Tab>"] = { "<cmd>BufferLineCycleNext<CR>" },
-    ["<S-Tab>"] = { "<cmd>BufferLineCyclePrev<CR>" },
-
-    ["<C-a>"] = { "<Plug>(dial-increment)", { noremap = false } },
-    ["<C-x>"] = { "<Plug>(dial-decrement)", { noremap = false } },
-    ["<C-p>"] = { "<cmd>MarkdownPreview<CR>" }, -- TODO override
-    ["<C-n>"] = { "<cmd>NvimTreeToggle<CR>" }, -- TODO override
-
-    ["<M-q>"] = { "<cmd>Bdelete<CR>" },
-    ["<M-Q>"] = { "<cmd>Bdelete!<CR>" },
-
+    -- window adjustment
     ["<Up>"] = { "<C-w>-" },
     ["<Down>"] = { "<C-w>+" },
     ["<Left>"] = { "<C-w><" },
     ["<Right>"] = { "<C-w>>" },
 
-    ["[c"] = { "&diff ? ']c' : '<cmd>Gitsigns prev_hunk<CR>'", { expr = true } },
-    ["]c"] = { "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true } },
+    -- clipboard copy/paste
+    ["<M-y>"] = { [["*y]] },
+    ["<M-y><M-y>"] = { [["*yy]] },
+    ["<M-p>"] = { [["*p]] },
 
-    ["<leader>1"] = { "<cmd>BufferLineGoToBuffer 1<CR>" },
-    ["<leader>2"] = { "<cmd>BufferLineGoToBuffer 2<CR>" },
-    ["<leader>3"] = { "<cmd>BufferLineGoToBuffer 3<CR>" },
-    ["<leader>4"] = { "<cmd>BufferLineGoToBuffer 4<CR>" },
-    ["<leader>5"] = { "<cmd>BufferLineGoToBuffer 5<CR>" },
-    ["<leader>6"] = { "<cmd>BufferLineGoToBuffer 6<CR>" },
-    ["<leader>7"] = { "<cmd>BufferLineGoToBuffer 7<CR>" },
-    ["<leader>8"] = { "<cmd>BufferLineGoToBuffer 8<CR>" },
-    ["<leader>9"] = { "<cmd>BufferLineGoToBuffer 9<CR>" },
+    -- clear search highlight
+    ["<leader>c"] = { ":noh<CR>" },
 
-    ["<leader>y"] = { '"*y' },
-    ["<leader>yy"] = { '"*yy' },
-    ["<leader>p"] = { '"*p' },
+    -- plugin: markdown-preview.nvim
+    ["<M-m>"] = { "<cmd>MarkdownPreview<CR>" },
+
+    -- plugin: nvim-tree.lua
+    ["<M-n>"] = { "<cmd>NvimTreeToggle<CR>" },
+
+    -- plugin: dial.nvim
+    ["<C-a>"] = {
+        function()
+            require("dial.map").manipulate("increment", "normal")
+        end,
+        { noremap = false },
+    },
+    ["<C-x>"] = {
+        function()
+            require("dial.map").manipulate("decrement", "normal")
+        end,
+        { noremap = false },
+    },
+
+    -- plugin: vim-bbye
+    ["<M-q>"] = { "<cmd>Bdelete<CR>" },
+    ["<M-Q>"] = { "<cmd>Bdelete!<CR>" },
+
+    -- plugin: nvim-spider
+    ["w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    ["e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["ge"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
+
+    -- plugin: gitsigns.nvim
+    -- use "[c" and "]c" in diff mode, otherwise use gitsigns to jump to hunk
+    ["]c"] = {
+        function()
+            if vim.wo.diff then
+                vim.cmd.normal({ "]c", bang = true })
+            else
+                gitsigns.nav_hunk("next")
+            end
+        end,
+    },
+    ["[c"] = {
+        function()
+            if vim.wo.diff then
+                vim.cmd.normal({ "[c", bang = true })
+            else
+                gitsigns.nav_hunk("prev")
+            end
+        end,
+    },
+
+    -- plugin: nvim-hlslens
+    ["n"] = {
+        [[<Cmd>execute("normal! " . v:count1 . "n")<CR><Cmd>lua require("hlslens").start()<CR>]],
+        { noremap = true, silent = true },
+    },
+    ["N"] = {
+        [[<Cmd>execute("normal! " . v:count1 . "N")<CR><Cmd>lua require("hlslens").start()<CR>]],
+        { noremap = true, silent = true },
+    },
+    ["*"] = { [[*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true } },
+    ["#"] = { [[#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true } },
+    ["g*"] = { [[g*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true } },
+    ["g#"] = { [[g#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true } },
+
+    -- plugin: oil.nvim
+    ["-"] = { "<cmd>Oil<CR>" },
+
+    -- plugin: bufferline.nvim
+    ["<Tab>"] = { "<cmd>BufferLineCycleNext<CR>" },
+    ["<S-Tab>"] = { "<cmd>BufferLineCyclePrev<CR>" },
 
     ["<leader>bh"] = { "<cmd>BufferLineCloseLeft<CR>" },
     ["<leader>bl"] = { "<cmd>BufferLineCloseRight<CR>" },
@@ -70,8 +112,6 @@ mappings["default"]["n"] = {
     ["<leader>bc"] = { "<cmd>BufferLinePickClose<CR>" },
     ["<leader>be"] = { "<cmd>BufferLineSortByExtension<CR>" },
     ["<leader>bd"] = { "<cmd>BufferLineSortByDirectory<CR>" },
-
-    ["<leader>c"] = { ":noh<CR>" },
 
     ["<leader>db"] = { '<cmd>lua require"dap".toggle_breakpoint()<CR>' },
     ["<leader>dc"] = { '<cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>' },
@@ -107,6 +147,11 @@ mappings["default"]["n"] = {
     ["<leader>fc"] = { '<cmd>lua require("telescope.builtin").commands()<CR>' },
     ["<leader>fhc"] = { '<cmd>lua require("telescope.builtin").command_history()<CR>' },
     ["<leader>fhs"] = { '<cmd>lua require("telescope.builtin").search_history()<CR>' },
+    ["<leader>fp"] = {
+        function()
+            require("telescope").extensions.projects.projects({})
+        end,
+    },
 
     gD = { "<cmd>lua vim.lsp.buf.declaration()<CR>" },
     gd = { "<cmd>lua vim.lsp.buf.definition()<CR>" },
@@ -168,45 +213,83 @@ mappings["default"]["n"] = {
     ["<leader>?"] = { '<cmd>execute "vimgrep /".@/."/g %"<CR>:copen<CR>' },
 }
 
--- o-mode
-mappings["default"]["o"] = {
+-- operator-pending
+mappings["direct"]["o"] = {
     al = { "<cmd>norm val<CR>" },
     il = { "<cmd>norm vil<CR>" },
-    -- ["iw"] = { "<Plug>CamelCaseMotion_iw", { noremap = false } },
-    -- ["ib"] = { "<Plug>CamelCaseMotion_ib", { noremap = false } },
-    -- ["ie"] = { "<Plug>CamelCaseMotion_ie", { noremap = false } },
+
+    -- plugin: nvim-spider
+    ["w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    ["e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["ge"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
+
+    -- plugin: leap.nvim
+    -- ["s"] = { "<Plug>(leap-forward)" },
+    -- ["S"] = { "<Plug>(leap-backward)" },
 }
 
--- x-mode
-mappings["default"]["x"] = {
-    -- more natural movement with wrap on
-    j = { 'v:count == 0 ? "gj" : "j"', { expr = true } },
-    k = { 'v:count == 0 ? "gk" : "k"', { expr = true } },
+-- visual
+mappings["direct"]["x"] = {
+    -- when line is wrapped, j/k moves between visual lines
+    j = { [[v:count == 0 ? "gj" : "j"]], { expr = true } },
+    k = { [[v:count == 0 ? "gk" : "k"]], { expr = true } },
 
     -- sane regexes
     ["/"] = { "/\\v" },
 
-    -- reselect visual block after indent/outdent
+    -- line text objects
+    il = { "g_o^" },
+
+    -- reselect after indent/outdent
     ["<"] = { "<gv" },
     [">"] = { ">gv" },
 
-    -- line text objects
-    al = { "$o^" },
-    il = { "g_o^" },
+    -- clipboard copy/paste
+    ["<M-y>"] = { [["*y]] },
+    ["<M-p>"] = { [["*p]] },
 
-    -- iw = { "<Plug>CamelCaseMotion_iw", { noremap = false } },
-    -- ib = { "<Plug>CamelCaseMotion_ib", { noremap = false } },
-    -- ie = { "<Plug>CamelCaseMotion_ie", { noremap = false } },
+    -- plugin: vim-unimpaired; reselect after unimpaired move selection up/down
+    ["[e"] = { "<Plug>(unimpaired-move-selection-up)gv" },
+    ["]e"] = { "<Plug>(unimpaired-move-selection-down)gv" },
 
-    ["<C-a>"] = { "<Plug>(dial-increment)", { noremap = false } },
-    ["<C-x>"] = { "<Plug>(dial-decrement)", { noremap = false } },
-    ["g<C-a>"] = { "<Plug>(dial-increment-additional)", { noremap = false } },
-    ["g<C-x>"] = { "<Plug>(dial-decrement-additional)", { noremap = false } },
+    -- plugin: nvim-spider
+    ["w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    ["e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["ge"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
+
+    -- plugin: dial.nvim
+    ["<C-a>"] = {
+        function()
+            require("dial.map").manipulate("increment", "visual")
+        end,
+        { noremap = false },
+    },
+    ["<C-x>"] = {
+        function()
+            require("dial.map").manipulate("decrement", "visual")
+        end,
+        { noremap = false },
+    },
+    ["g<C-a>"] = {
+        function()
+            require("dial.map").manipulate("increment", "gvisual")
+        end,
+        { noremap = false },
+    },
+    ["g<C-x>"] = {
+        function()
+            require("dial.map").manipulate("decrement", "gvisual")
+        end,
+        { noremap = false },
+    },
+
+    -- plugin: leap.nvim
+    -- ["s"] = { "<Plug>(leap-forward)" },
+    -- ["S"] = { "<Plug>(leap-backward)" },
 
     ["<leader>ds"] = { '<ESC>:lua require("dap-python").debug_selection()<CR>' },
-
-    ["<leader>y"] = { '"*y' },
-    ["<leader>p"] = { '"*p' },
 
     ["<leader>re"] = { '<Esc><Cmd>lua require("refactoring").refactor("Extract Function")<CR>' },
     ["<leader>rf"] = { '<Esc><Cmd>lua require("refactoring").refactor("Extract Function To File")<CR>' },
@@ -217,25 +300,24 @@ mappings["default"]["x"] = {
     ["<leader>lc"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>" },
 }
 
--- i-mode
-mappings["default"]["i"] = {
-    ["<M-b>"] = { "<C-o><Plug>CamelCaseMotion_b", { noremap = false } },
-    ["<M-w>"] = { "<C-o><Plug>CamelCaseMotion_w", { noremap = false } },
-    ["<M-p>"] = { "<C-r>*" },
+-- insert/command
+mappings["direct"]["i"] = {
+    ["<C-p>"] = { "<C-r>*" }, -- paste from clipboard
+
+    -- plugin: nvim-spider
+    ["<C-w>"] = { [[<Esc>l<cmd>lua require("spider").motion("w")<CR>i]] },
+    ["<C-r>"] = { [[<Esc><cmd>lua require("spider").motion("b")<CR>i]] },
 }
 
--- c-mode
-mappings["default"]["c"] = {
+-- command
+mappings["direct"]["c"] = {
     ["<C-a>"] = { "<home>" },
     ["<C-e>"] = { "<end>" },
 }
 
-
 -- Plugin key configurations that is registered through plugin setup
-mappings["plugins"] = {
+mappings["passthrough"] = {
     after = {
-        -- Override vim-move
-        -- TODO: move this to default key maps. Keymaps are already defined after plugins
         bufferline = {
             n = {
                 ["<M-h>"] = { "<cmd>BufferLineMovePrev<CR>" },
@@ -247,7 +329,7 @@ mappings["plugins"] = {
     telescope = {
         toggle_preview = "<A-p>",
         close = "<C-c>",
-        open_with_trouble = "<C-t>",
+        open_trouble = "<C-t>",
     },
     treesitter = {
         init_selection = "<C-s>",
@@ -317,9 +399,8 @@ mappings["plugins"] = {
     },
 }
 
-
 local M = {
-    plugins = mappings.plugins,
+    passthrough = mappings.passthrough,
 
     set_keymap = function(mode, key, command, options)
         if options == nil then
@@ -344,16 +425,16 @@ local M = {
     register = function(self)
         -- all key modes, see map-modes in vimdoc
         local modes = { "", "n", "i", "v", "x", "c", "t", "o" }
-        local default_mappings = mappings["default"]
+        local default_mappings = mappings["direct"]
         for _, mode in ipairs(modes) do
             if default_mappings[mode] ~= nil then
                 for key, val in pairs(default_mappings[mode]) do
                     if #val == 1 then
-                        cmd = val[1]
+                        local cmd = val[1]
                         self.set_keymap(mode, key, cmd)
                     else
-                        cmd = val[1]
-                        opts = val[2]
+                        local cmd = val[1]
+                        local opts = val[2]
                         self.set_keymap(mode, key, cmd, opts)
                     end
                 end

@@ -11,10 +11,10 @@ M.config = function()
         },
         incremental_selection = {
             enable = true,
-            keymaps = keys.plugins.treesitter,
+            keymaps = keys.passthrough.treesitter,
         },
         indent = {
-            enable = true
+            enable = true,
         },
 
         -- nvim-treesitter-textobjects
@@ -22,25 +22,25 @@ M.config = function()
             select = {
                 enable = true,
                 lookahead = true,
-                keymaps = keys.plugins.textobj.keymaps,
+                keymaps = keys.passthrough.textobj.keymaps,
             },
             swap = {
                 enable = true,
-                swap_next = keys.plugins.textobj.swap_next,
-                swap_previous = keys.plugins.textobj.swap_previous,
+                swap_next = keys.passthrough.textobj.swap_next,
+                swap_previous = keys.passthrough.textobj.swap_previous,
             },
             move = {
                 enable = true,
                 set_jumps = true, -- whether to set jumps in the jumplist
-                goto_next_start = keys.plugins.textobj.goto_next_start,
-                goto_next_end = keys.plugins.textobj.goto_next_end,
-                goto_previous_start = keys.plugins.textobj.goto_previous_start,
-                goto_previous_end = keys.plugins.textobj.goto_previous_end,
+                goto_next_start = keys.passthrough.textobj.goto_next_start,
+                goto_next_end = keys.passthrough.textobj.goto_next_end,
+                goto_previous_start = keys.passthrough.textobj.goto_previous_start,
+                goto_previous_end = keys.passthrough.textobj.goto_previous_end,
             },
             lsp_interop = {
                 enable = true,
                 border = "none",
-                peek_definition_code = keys.plugins.textobj.peek_definition_code,
+                peek_definition_code = keys.passthrough.textobj.peek_definition_code,
             },
         },
 

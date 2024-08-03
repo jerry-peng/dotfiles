@@ -43,6 +43,7 @@ export PATH="/usr/local/opt/ruby/bin:$PATH" # Ruby
 export PATH="/usr/local/opt/python/libexec/bin:$PATH" # Python
 export PATH="/usr/local/opt/llvm/bin:$PATH" # LLVM
 export PATH="$HOME/.cargo/bin:$PATH" # Cargo
+export PATH="/usr/local/opt/ssh-copy-id/bin:$PATH" # ssh-copy-id
 
 # llvm PATH and FLAG settings
 export LDFLAGS="-L /usr/local/opt/llvm/lib"

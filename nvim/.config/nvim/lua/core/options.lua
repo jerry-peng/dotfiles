@@ -106,9 +106,11 @@ opt.splitright = true -- split window right
 
 -- Fold
 opt.foldmethod = "expr"
-opt.foldexpr = "nvim_treesitter#foldexpr()" -- use treesitter fold
-opt.foldenable = false -- disable folding at startup
-opt.foldlevel = 99 -- prevent folding when opening files
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- fold detection with treesitter
+opt.foldtext = "" -- enable syntax highlighting on fold text
+opt.fillchars:append("fold:<") -- fold text filler char
+opt.foldenable = true -- enable folding at startup
+opt.foldlevel = 99 -- minimum level of fold closed by default, prevent folding when opening files
 
 -- Disable builtin plugins
 local disabled_built_ins = {

@@ -21,4 +21,12 @@ M.flatten_lists = function(lists)
     return aggregate
 end
 
+M.removeFirst = function(tbl, val)
+    for i, v in ipairs(tbl) do
+        if v == val then
+            return table.remove(tbl, i)
+        end
+    end
+end
+
 return M

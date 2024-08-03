@@ -1,81 +1,75 @@
 local telescope = require("telescope")
 local actions = require("telescope.actions")
 local action_layout = require("telescope.actions.layout")
-local previewers = require("telescope.previewers")
-local trouble = require("trouble.providers.telescope")
-local Job = require("plenary.job")
-local keys = require("core.keymaps").plugins.telescope
+local trouble = require("trouble.sources.telescope")
+local keys = require("core.keymaps").passthrough.telescope
+
+--[[
+Note:
+- project.nvim automatically set working directory to git root if current working directory
+  is in a git directory.
+- Use fzf instead of fzy because fzf supports regex.
+]]
 
 local M = {}
 
---[[
-- general
-    - quit insert mode
-    - clear prompt
-    - delete buffer
-    - Toggle file preview
-    - mapping to cycle previewer for git commits to show full message
-- picker
-    - file and text search in hidden files and dir
-    - remove ./ from `fd` results
-    - rg remove indentation
-]]
-
 M.config = function()
-    local previewer_maker = function(filepath, bufnr, opts)
-        opts = opts or {}
-        filepath = vim.fn.expand(filepath)
-        vim.loop.fs_stat(filepath, function(_, stat)
-            if not stat then
-                return
-            end
-            if stat.size > 100000 then
-                return
-            end
-        end)
-        Job
-            :new({
-                command = "file",
-                args = { "--mime-type", "-b", filepath },
-                on_exit = function(j)
-                    local mime_type = vim.split(j:result()[1], "/")[1]
-                    if mime_type == "text" then
-                        previewers.buffer_previewer_maker(filepath, bufnr, opts)
-                    else
-                        -- maybe we want to write something to the buffer here
-                        vim.schedule(function()
-                            vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, { "BINARY" })
-                        end)
-                    end
-                end,
-            })
-            :sync()
-    end
-
     telescope.setup({
         defaults = {
+            prompt_prefix = "  ",
+            selection_caret = "❯ ",
+            sorting_strategy = "ascending", -- display results top to bottom
+            layout_strategy = "flex",
+            layout_config = {
+                flex = {
+                    flip_columns = 130,
+                },
+                vertical = {
+                    mirror = true,
+                    prompt_position = "top",
+                },
+                horizontal = {
+                    prompt_position = "top",
+                },
+            },
+            file_sorter = require("telescope.sorters").get_fuzzy_file, -- fzf for file sorter
+            generic_sorter = require("telescope.sorters").get_generic_fuzzy_sorter, -- fzf sorter for generic sorter
+            file_ignore_patterns = { "node_modules" }, -- ignore file pattern
+            path_display = { "truncate" }, -- truncate start of path if whole path does not fit in entry row
+            vimgrep_arguments = { -- defines command used for `live_grep` and `grep_string`
+                "rg",
+                "-L",
+                "--color=never",
+                "--no-heading",
+                "--with-filename",
+                "--line-number",
+                "--column",
+                "--smart-case",
+                "--trim", -- trims whitespace
+                "--hidden", -- search hidden files, respect dot ignore files.
+                "--glob", -- exclude files matching `.git` glob below
+                "!**/.git/*",
+            },
             mappings = {
                 n = {
                     [keys.toggle_preview] = action_layout.toggle_preview,
                     [keys.close] = actions.close,
-                    [keys.open_with_trouble] = trouble.open_with_trouble,
-                    ["cd"] = function(prompt_bufnr)
-                        local selection = require("telescope.actions.state").get_selected_entry()
-                        local dir = vim.fn.fnamemodify(selection.path, ":p:h")
-                        require("telescope.actions").close(prompt_bufnr)
-                        -- Depending on what you want put `cd`, `lcd`, `tcd`
-                        vim.cmd(string.format("silent lcd %s", dir))
-                    end
+                    [keys.open_trouble] = trouble.open,
                 },
                 i = {
                     ["<c-d>"] = actions.delete_buffer,
                     ["<C-s>"] = actions.cycle_previewers_next,
                     [keys.toggle_preview] = action_layout.toggle_preview,
-                    [keys.open_with_trouble] = trouble.open_with_trouble,
+                    [keys.open_trouble] = trouble.open,
                 },
             },
-            scroll_strategy = "limit",
-            buffer_previewer_maker = previewer_maker,
+            buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
+        },
+        pickers = {
+            find_files = {
+                -- glob except '.git/'
+                find_command = { "rg", "--files", "--glob", "!**/.git/*" },
+            },
         },
         extensions = {
             fzf_native = {
@@ -86,8 +80,11 @@ M.config = function()
             },
         },
     })
+
+    -- Extensions
     telescope.load_extension("fzf")
     telescope.load_extension("dap")
+    telescope.load_extension("projects")
 end
 
 return M

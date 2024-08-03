@@ -3,60 +3,64 @@ local utils = require("core.utils")
 local M = {}
 
 M.servers = {
-    "clangd",                 -- C/C++
-    "pyright",                -- Python
-    "rust_analyzer",          -- Rust
-    "tsserver",               -- JS/TS
-    "lua_ls",                 -- Lua
-    "solargraph",             -- Ruby
+    "clangd", -- C/C++
+    "pyright", -- Python
+    "rust_analyzer", -- Rust
+    "tsserver", -- JS/TS
+    "lua_ls", -- Lua
+    "solargraph", -- Ruby
     "kotlin_language_server", -- Kotlin
-    "hls",                    -- Haskell
-    "bashls",                 -- Shell
-    "sqls",                   -- SQL
-    "dockerls",               -- Docker
-    "html",                   -- HTML
-    "cssls",                  -- CSS
-    "yamlls",                 -- YAML
-    "jsonls",                 -- JSON
-    "marksman"                -- Markdown
+    "hls", -- Haskell
+    "bashls", -- Shell
+    "sqls", -- SQL
+    "dockerls", -- Docker
+    "html", -- HTML
+    "cssls", -- CSS
+    "yamlls", -- YAML
+    "jsonls", -- JSON
+    "marksman", -- Markdown
 }
 
 -- Some linters includes formatting capabilities
 M.linters = {
-    "cpplint",      -- C/C++
-    "ruff",         -- Python
-    "eslint_d",     -- JavaScript/TypeScript/JSX/TSX/Vue/etc
-    "luacheck",     -- Lua
-    "rubocop",      -- Ruby; linter + formatter
-    "ktlint",       -- Kotlin; linter + formatter
-    "shellcheck",   -- Shell
-    "sqlfluff",     -- SQL
-    "hadolint",     -- Docker
-    "stylelint",    -- CSS
-    "yamllint",     -- YAML
-    "jsonlint",     -- JSON
+    "cpplint", -- C/C++
+    "ruff", -- Python
+    "eslint_d", -- JavaScript/TypeScript/JSX/TSX/Vue/etc
+    "luacheck", -- Lua
+    "rubocop", -- Ruby; linter + formatter
+    "ktlint", -- Kotlin; linter + formatter
+    "shellcheck", -- Shell
+    "sqlfluff", -- SQL
+    "hadolint", -- Docker
+    "stylelint", -- CSS
+    "yamllint", -- YAML
+    "jsonlint", -- JSON
     "markdownlint", -- Markdown
-    "typos",        -- Spellchecker
-    -- "proselint", -- English prose
+    "typos", -- Spellchecker
 }
 
 M.formatters = {
     -- rustfmt (Rust formatter) installed through rustup
-    "clang-format",  -- C/C++/Java/JavaScript/JSON/Objective-C/Protobuf/C#
-    "black",         -- Python
-    "isort",         -- Python; import sorter
-    "stylua",        -- Lua
-    "prettierd",     -- HTML/CSS/JavaScript/TypeScript/JSX/TSX/Vue/JSON/YAML/Markdown/etc
-    "fourmolu",      -- Haskell
-    "shfmt",         -- Shell
+    "clang-format", -- C/C++/Java/JavaScript/JSON/Objective-C/Protobuf/C#
+    "black", -- Python
+    "isort", -- Python; import sorter
+    "stylua", -- Lua
+    "prettierd", -- HTML/CSS/JavaScript/TypeScript/JSX/TSX/Vue/JSON/YAML/Markdown/etc
+    "fourmolu", -- Haskell
+    "shfmt", -- Shell
     "sql-formatter", -- SQL
-    "yamlfmt"        -- YAML
+    "yamlfmt", -- YAML
 }
 
-M.tools = utils.flatten_lists({ M.servers, M.linters, M.formatters })
+M.debug_adapters = {
+    "debugpy", -- Python
+    "codelldb", -- C/C++/Rust
+    "js-debug-adapter", -- JavaScript/TypeScript
+}
+
+M.tools = utils.flatten_lists({ M.servers, M.linters, M.formatters, M.debug_adapters })
 
 M.config = function()
-    print(M.tools)
     require("mason-tool-installer").setup({
         ensure_installed = M.tools,
         auto_update = true,

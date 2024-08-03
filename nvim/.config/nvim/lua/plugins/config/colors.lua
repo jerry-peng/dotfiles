@@ -1,31 +1,59 @@
 local M = {}
 
 -- Solarized light theme colors
-local colors = {
-    none = { "none", "none" },
-    base03 = { "#fdf6e3", 231 },
-    base02 = { "#eee8d5", 230 },
-    base01 = { "#93a1a1", 145 },
-    base00 = { "#839496", 145 },
-    base0 = { "#657b83", 103 },
-    base1 = { "#586e75", 102 },
-    base2 = { "#073642", 23 },
-    base3 = { "#002b36", 23 },
-    yellow = { "#b58900", 178 },
-    orange = { "#cb4b16", 166 },
-    red = { "#dc322f", 203 },
-    magenta = { "#d33682", 169 },
-    violet = { "#6c71c4", 104 },
-    blue = { "#268bd2", 38 },
-    cyan = { "#2aa198", 37 },
-    green = { "#859900", 142 },
+local solarized_light = {
+    base03 = "#fdf6e3",
+    base02 = "#eee8d5",
+    base01 = "#93a1a1",
+    base00 = "#839496",
+    base0 = "#657b83",
+    base1 = "#586e75",
+    base2 = "#073642",
+    base3 = "#002b36",
+    yellow = "#b58900",
+    orange = "#cb4b16",
+    red = "#dc322f",
+    magenta = "#d33682",
+    violet = "#6c71c4",
+    blue = "#268bd2",
+    cyan = "#2aa198",
+    green = "#859900",
+
+    -- Non-standard colors
+    base02_dark = "#e3ddcc", -- NvimTree background
 }
 
 M.config = function()
-    vim.opt.background = "light"
-    vim.cmd("colorscheme solarized")
+    vim.o.background = "light"
+    require("solarized").setup({
+        colors = function()
+            return solarized_light
+        end,
+        highlights = function(colors)
+            return {
+                --[[ Vanilla Neovim ]]
+                -- window separator
+                WinSeparator = { fg = colors.base02_dark, bg = colors.base02_dark },
+
+                --[[ Telescope.nvim ]]
+                -- general
+                TelescopeBorder = { fg = colors.base02, bg = colors.base02 },
+                TelescopeNormal = { fg = colors.base0, bg = colors.base02 },
+                TelescopeSelection = { fg = colors.base01, bg = colors.base02 },
+                -- prompt
+                TelescopePromptTitle = { fg = colors.base02, bg = colors.cyan, reverse = false },
+                TelescopePromptCounter = { fg = colors.blue, bg = colors.base02 },
+                TelescopePromptPrefix = { fg = colors.blue, bg = colors.base02 },
+                -- results
+                TelescopeResultsTitle = { fg = colors.base02, bg = colors.base02, reverse = false },
+                -- preview
+                TelescopePreviewTitle = { fg = colors.base02, bg = colors.magenta, reverse = false },
+            }
+        end,
+    })
+    vim.cmd.colorscheme("solarized")
 end
 
-M.colors = colors
+M.colors = solarized_light
 
 return M
