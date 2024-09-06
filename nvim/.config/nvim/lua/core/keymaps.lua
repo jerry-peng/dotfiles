@@ -1,14 +1,11 @@
-local gitsigns = require("gitsigns")
-
-local mappings = {}
-mappings["direct"] = {}
-mappings["passthrough"] = {}
+-- Direct keymap assignments
+local direct_mappings = {}
 
 -- normal/visual/select/operator-pending
-mappings["direct"][""] = {}
+direct_mappings[""] = {}
 
 -- normal
-mappings["direct"]["n"] = {
+direct_mappings["n"] = {
     -- more natural movement with wrap on
     j = { [[v:count == 0 ? "gj" : "j"]], { expr = true } },
     k = { [[v:count == 0 ? "gk" : "k"]], { expr = true } },
@@ -17,14 +14,17 @@ mappings["direct"]["n"] = {
     H = { "^" },
     L = { "$" },
 
-    -- override ? to use sane regexes (not used since we have auto-completion)
-    ["/"] = { "/\\v" },
+    -- override ? to use sane regexes.
+    -- Using ? instead of / because flash.nvim search integration does not work if sane regexes is enabled
+    ["?"] = { "/\\v" },
 
-    -- window adjustment
-    ["<Up>"] = { "<C-w>-" },
-    ["<Down>"] = { "<C-w>+" },
-    ["<Left>"] = { "<C-w><" },
-    ["<Right>"] = { "<C-w>>" },
+    -- window pane adjustment
+    ["<leader>w-"] = { "<c-w>=" }, -- shrink pane
+    ["<leader>w="] = { "<C-w><Bar><C-w>_<CR>" }, -- enlarge pane
+    ["<leader>wh"] = { "<C-w>5<" }, -- shift pane's right edge leftward by 5
+    ["<leader>wj"] = { "<cmd>resize +5<cr>" }, -- shift pane's bottom edge upward by 5
+    ["<leader>wk"] = { "<cmd>resize -5<cr>" }, -- shift pane's bottom edge downward by 5
+    ["<leader>wl"] = { "<C-w>5>" }, -- shift pane's right edge rightward by 5
 
     -- clipboard copy/paste
     ["<M-y>"] = { [["*y]] },
@@ -34,8 +34,46 @@ mappings["direct"]["n"] = {
     -- clear search highlight
     ["<leader>c"] = { ":noh<CR>" },
 
+    -- close floating window
+    ["<leader>q"] = { [[<cmd>lua require"core.utils".close_float_windows()<CR>]] },
+
+    -- Send search results to quickfix list
+    ["<leader>/"] = { [[<cmd>execute "vimgrep /".@/."/g %"<CR>:copen<CR>]] },
+
+    -- plugin: undotree
+    ["<M-u>"] = { vim.cmd.UndotreeToggle },
+
+    -- plugin: smart-splits.nvim
+    ["<M-w>"] = { require("smart-splits").start_resize_mode },
+    ["<C-h>"] = { require("smart-splits").move_cursor_left },
+    ["<C-j>"] = { require("smart-splits").move_cursor_down },
+    ["<C-k>"] = { require("smart-splits").move_cursor_up },
+    ["<C-l>"] = { require("smart-splits").move_cursor_right },
+
     -- plugin: markdown-preview.nvim
     ["<M-m>"] = { "<cmd>MarkdownPreview<CR>" },
+    ["<M-t>"] = { "<cmd>RenderMarkdown toggle<CR>" },
+
+    -- plugin: gitsigns.nvim
+    -- use "[c" and "]c" in diff mode, otherwise use gitsigns to jump to hunk
+    ["]c"] = {
+        function()
+            if vim.wo.diff then
+                vim.cmd.normal({ "]c", bang = true })
+            else
+                require("gitsigns").nav_hunk("next")
+            end
+        end,
+    },
+    ["[c"] = {
+        function()
+            if vim.wo.diff then
+                vim.cmd.normal({ "[c", bang = true })
+            else
+                require("gitsigns").nav_hunk("prev")
+            end
+        end,
+    },
 
     -- plugin: nvim-tree.lua
     ["<M-n>"] = { "<cmd>NvimTreeToggle<CR>" },
@@ -59,29 +97,19 @@ mappings["direct"]["n"] = {
     ["<M-Q>"] = { "<cmd>Bdelete!<CR>" },
 
     -- plugin: nvim-spider
-    ["w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
-    ["b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    ["e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
-    ["ge"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
+    [",w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    [",b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    [",e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
 
-    -- plugin: gitsigns.nvim
-    -- use "[c" and "]c" in diff mode, otherwise use gitsigns to jump to hunk
-    ["]c"] = {
+    -- plugin: flash.nvim
+    ["s"] = {
         function()
-            if vim.wo.diff then
-                vim.cmd.normal({ "]c", bang = true })
-            else
-                gitsigns.nav_hunk("next")
-            end
+            require("flash").jump()
         end,
     },
-    ["[c"] = {
+    ["S"] = {
         function()
-            if vim.wo.diff then
-                vim.cmd.normal({ "[c", bang = true })
-            else
-                gitsigns.nav_hunk("prev")
-            end
+            require("flash").treesitter()
         end,
     },
 
@@ -94,24 +122,106 @@ mappings["direct"]["n"] = {
         [[<Cmd>execute("normal! " . v:count1 . "N")<CR><Cmd>lua require("hlslens").start()<CR>]],
         { noremap = true, silent = true },
     },
-    ["*"] = { [[*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true } },
-    ["#"] = { [[#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true } },
-    ["g*"] = { [[g*<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true } },
-    ["g#"] = { [[g#<Cmd>lua require('hlslens').start()<CR>]], { noremap = true, silent = true } },
+    ["*"] = { [[*<Cmd>lua require("hlslens").start()<CR>]], { noremap = true, silent = true } },
+    ["#"] = { [[#<Cmd>lua require("hlslens").start()<CR>]], { noremap = true, silent = true } },
+    ["g*"] = { [[g*<Cmd>lua require("hlslens").start()<CR>]], { noremap = true, silent = true } },
+    ["g#"] = { [[g#<Cmd>lua require("hlslens").start()<CR>]], { noremap = true, silent = true } },
 
     -- plugin: oil.nvim
     ["-"] = { "<cmd>Oil<CR>" },
 
+    -- plugin: grapple.nvim
+    [",t"] = { require("grapple").toggle },
+    [",g"] = { require("grapple").open_tags },
+    [",n"] = { "<cmd>Grapple cycle_tags next<cr>" },
+    [",p"] = { "<cmd>Grapple cycle_tags prev<cr>" },
+    [",1"] = { "<cmd>Grapple select index=1<cr>" },
+    [",2"] = { "<cmd>Grapple select index=2<cr>" },
+    [",3"] = { "<cmd>Grapple select index=3<cr>" },
+    [",4"] = { "<cmd>Grapple select index=4<cr>" },
+    [",5"] = { "<cmd>Grapple select index=5<cr>" },
+    [",6"] = { "<cmd>Grapple select index=6<cr>" },
+    [",7"] = { "<cmd>Grapple select index=7<cr>" },
+    [",8"] = { "<cmd>Grapple select index=8<cr>" },
+    [",9"] = { "<cmd>Grapple select index=9<cr>" },
+
     -- plugin: bufferline.nvim
     ["<Tab>"] = { "<cmd>BufferLineCycleNext<CR>" },
     ["<S-Tab>"] = { "<cmd>BufferLineCyclePrev<CR>" },
-
-    ["<leader>bh"] = { "<cmd>BufferLineCloseLeft<CR>" },
-    ["<leader>bl"] = { "<cmd>BufferLineCloseRight<CR>" },
+    ["<leader>bj"] = { "<cmd>BufferLineCloseLeft<CR>" },
+    ["<leader>bk"] = { "<cmd>BufferLineCloseRight<CR>" },
+    ["<leader>bh"] = { "<cmd>BufferLineMovePrev<CR>" },
+    ["<leader>bl"] = { "<cmd>BufferLineMoveNext<CR>" },
     ["<leader>bb"] = { "<cmd>BufferLinePick<CR>" },
     ["<leader>bc"] = { "<cmd>BufferLinePickClose<CR>" },
     ["<leader>be"] = { "<cmd>BufferLineSortByExtension<CR>" },
     ["<leader>bd"] = { "<cmd>BufferLineSortByDirectory<CR>" },
+    ["<leader>1"] = { [[<cmd>lua require("bufferline").go_to(1, true)<cr>]] },
+    ["<leader>2"] = { [[<cmd>lua require("bufferline").go_to(2, true)<cr>]] },
+    ["<leader>3"] = { [[<cmd>lua require("bufferline").go_to(3, true)<cr>]] },
+    ["<leader>4"] = { [[<cmd>lua require("bufferline").go_to(4, true)<cr>]] },
+    ["<leader>5"] = { [[<cmd>lua require("bufferline").go_to(5, true)<cr>]] },
+    ["<leader>6"] = { [[<cmd>lua require("bufferline").go_to(6, true)<cr>]] },
+    ["<leader>7"] = { [[<cmd>lua require("bufferline").go_to(7, true)<cr>]] },
+    ["<leader>8"] = { [[<cmd>lua require("bufferline").go_to(8, true)<cr>]] },
+    ["<leader>9"] = { [[<cmd>lua require("bufferline").go_to(9, true)<cr>]] },
+
+    -- plugin: telescope.nvim
+    ["<leader>fb"] = { [[<cmd>lua require("telescope.builtin").builtin()<CR>]] },
+    ["<leader>fr"] = { [[<cmd>lua require("telescope.builtin").resume()<CR>]] },
+    ["<leader>ff"] = { [[<cmd>lua require("telescope.builtin").find_files()<CR>]] },
+    ["<leader>fd"] = { [[<cmd>lua require("telescope.builtin").find_files({hidden=true})<CR>]] },
+    ["<leader>fe"] = { [[<cmd>lua require("telescope.builtin").grep_string()<CR>]] },
+    ["<leader>fg"] = { [[<cmd>lua require("telescope.builtin").git_files()<CR>]] },
+    ["<leader>fl"] = { [[<cmd>lua require("telescope.builtin").live_grep()<CR>]] },
+    ["<leader>f/"] = { [[<cmd>lua require("telescope.builtin").current_buffer_fuzzy_find()<CR>]] },
+    ["<leader>fh"] = { [[<cmd>lua require("telescope.builtin").help_tags()<CR>]] },
+    ["<leader>fc"] = { [[<cmd>lua require("telescope.builtin").commands()<CR>]] },
+    ["<leader>fx"] = { [[<cmd>lua require("telescope.builtin").command_history()<CR>]] },
+    ["<leader>fs"] = { [[<cmd>lua require("telescope.builtin").search_history()<CR>]] },
+
+    -- plugin: projects.nvim extension for telescope.nvim
+    ["<leader>fp"] = {
+        function()
+            require("telescope").extensions.projects.projects({})
+        end,
+    },
+    -- plugin: grapple.nvim extension for telescope.nvim
+    ["<leader>ft"] = { "<cmd>Telescope grapple tags<CR>" },
+    -- plugin: aerial.nvim extension for telescope.nvim
+    ["<leader>fa"] = { "<cmd>Telescope aerial<CR>" },
+
+    -- plugin: nvim-treesitter-textobjects
+    ["<M-;>"] = { require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_next },
+    ["<M-,>"] = { require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_previous },
+
+    -- plugin: treesj
+    ["<M-j>"] = { [[<cmd>lua require("treesj").toggle()<CR>]] },
+
+    -- plugin: refactoring.nvim
+    ["<M-r>"] = {
+        function()
+            require("telescope").extensions.refactoring.refactors()
+        end,
+    },
+
+    -- plugin: aerial.nvim
+    ["<M-a>"] = { "<cmd>AerialToggle!<CR>" },
+    ["{"] = { "<cmd>AerialPrev<CR>" },
+    ["}"] = { "<cmd>AerialNext<CR>" },
+
+    -- plugin: nvim-lspconfig
+    gd = { "<cmd>lua vim.lsp.buf.declaration()<CR>" },
+    gr = { "<cmd>lua vim.lsp.buf.references()<CR>" },
+    gi = { "<cmd>lua vim.lsp.buf.implementation()<CR>" },
+    ["<leader>la"] = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>" },
+    ["<leader>ld"] = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>" },
+    ["<leader>ll"] = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>" },
+    ["<leader>lt"] = { "<cmd>lua vim.lsp.buf.type_definition()<CR>" },
+    ["<leader>lr"] = { ":IncRename " },
+    ["<leader>lc"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>" },
+    ["<leader>dd"] = { "<cmd>lua vim.diagnostic.open_float()<CR>" },
+    ["<leader>dq"] = { "<cmd>lua vim.diagnostic.setqflist()<CR>" },
 
     ["<leader>db"] = { '<cmd>lua require"dap".toggle_breakpoint()<CR>' },
     ["<leader>dc"] = { '<cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>' },
@@ -137,44 +247,6 @@ mappings["direct"]["n"] = {
     ["<leader>dfv"] = { "<cmd>Telescope dap variables<CR>" },
     ["<leader>dff"] = { "<cmd>Telescope dap frames<CR>" },
 
-    ["<leader>ff"] = { '<cmd>lua require("telescope.builtin").find_files()<CR>' },
-    ["<leader>fd"] = { '<cmd>lua require("telescope.builtin").find_files({hidden=true})<CR>' },
-    ["<leader>f/"] = { '<cmd>lua require("telescope.builtin").current_buffer_fuzzy_find()<CR>' },
-    ["<leader>ft"] = { '<cmd>lua require("telescope.builtin").help_tags()<CR>' },
-    ["<leader>fl"] = { '<cmd>lua require("telescope.builtin").live_grep()<CR>' },
-    ["<leader>fb"] = { '<cmd>lua require("telescope.builtin").buffers()<CR>' },
-    ["<leader>fa"] = { '<cmd>lua require("telescope.builtin").builtin()<CR>' },
-    ["<leader>fc"] = { '<cmd>lua require("telescope.builtin").commands()<CR>' },
-    ["<leader>fhc"] = { '<cmd>lua require("telescope.builtin").command_history()<CR>' },
-    ["<leader>fhs"] = { '<cmd>lua require("telescope.builtin").search_history()<CR>' },
-    ["<leader>fp"] = {
-        function()
-            require("telescope").extensions.projects.projects({})
-        end,
-    },
-
-    gD = { "<cmd>lua vim.lsp.buf.declaration()<CR>" },
-    gd = { "<cmd>lua vim.lsp.buf.definition()<CR>" },
-    gr = { "<cmd>lua vim.lsp.buf.references()<CR>" }, -- TODO duplicate key
-    K = { "<cmd>lua vim.lsp.buf.hover()<CR>" },
-    gi = { "<cmd>lua vim.lsp.buf.implementation()<CR>" }, -- TODO in conflict with default gi
-    ["<leader>wa"] = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>" },
-    ["<leader>wr"] = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>" },
-    ["<leader>wf"] = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>" },
-    ["<leader>lt"] = { "<cmd>lua vim.lsp.buf.type_definition()<CR>" },
-    ["<leader>ls"] = { "<cmd>lua vim.lsp.buf.signature_help()<CR>" },
-    ["<leader>lr"] = { "<cmd>lua vim.lsp.buf.rename()<CR>" },
-    ["<leader>lc"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>" },
-    ["<leader>lf"] = { "<cmd>lua vim.lsp.buf.format{async=true}<CR>" },
-    ["<leader>dd"] = { "<cmd>lua vim.diagnostic.open_float()<CR>" },
-    ["<leader>dq"] = { "<cmd>lua vim.diagnostic.setqflist()<CR>" },
-    ["[d"] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>" },
-    ["]d"] = { "<cmd>lua vim.diagnostic.goto_next()<CR>" },
-
-    ["<leader>q"] = { '<cmd>lua require"core.utils".close_float_windows()<CR>' },
-
-    ["<leader>rr"] = { '<Esc><cmd>lua require("telescope").extensions.refactoring.refactors()<CR>' },
-
     ["<leader>ss"] = { "<cmd>SnipRun<CR>" },
     ["<leader>sr"] = { "<cmd>SnipReset<CR>" },
     ["<leader>sc"] = { "<cmd>SnipClose<CR>" },
@@ -194,14 +266,7 @@ mappings["direct"]["n"] = {
     ["[t"] = { "<Plug>(ultest-prev-fail)", { noremap = false } },
     ["]t"] = { "<Plug>(ultest-next-fail)", { noremap = false } },
 
-    ["<leader>w-"] = { "<c-w>=" },
-    ["<leader>w="] = { "<C-w><Bar><C-w>_<CR>" },
-    ["<leader>wh"] = { "<C-w>5<" },
-    ["<leader>wj"] = { "<cmd>resize +5<cr>" },
-    ["<leader>wk"] = { "<cmd>resize -5<cr>" },
-    ["<leader>wl"] = { "<C-w>5>" },
-
-    gr = { "<cmd>TroubleToggle lsp_references<cr>" },
+    -- gr = { "<cmd>TroubleToggle lsp_references<cr>" },
     ["<leader>xx"] = { "<cmd>TroubleToggle<cr>" },
     ["<leader>xw"] = { "<cmd>TroubleToggle workspace_diagnostics<cr>" },
     ["<leader>xd"] = { "<cmd>TroubleToggle document_diagnostics<cr>" },
@@ -209,28 +274,47 @@ mappings["direct"]["n"] = {
     ["<leader>xl"] = { "<cmd>TroubleToggle loclist<cr>" },
     ["[x"] = { ':lua require("trouble").next({skip_groups = true, jump = true});<CR>' },
     ["]x"] = { ':lua require("trouble").previous({skip_groups = true, jump = true});<CR>' },
-
-    ["<leader>?"] = { '<cmd>execute "vimgrep /".@/."/g %"<CR>:copen<CR>' },
 }
 
 -- operator-pending
-mappings["direct"]["o"] = {
+direct_mappings["o"] = {
     al = { "<cmd>norm val<CR>" },
     il = { "<cmd>norm vil<CR>" },
 
     -- plugin: nvim-spider
-    ["w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
-    ["b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    ["e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
-    ["ge"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
+    [",w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    [",b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    [",e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
 
-    -- plugin: leap.nvim
-    -- ["s"] = { "<Plug>(leap-forward)" },
-    -- ["S"] = { "<Plug>(leap-backward)" },
+    -- plugin: flash.nvim
+    ["s"] = {
+        function()
+            require("flash").jump()
+        end,
+    },
+    ["S"] = {
+        function()
+            require("flash").treesitter()
+        end,
+    },
+    ["r"] = {
+        function()
+            require("flash").remote()
+        end,
+    },
+    ["R"] = {
+        function()
+            require("flash").treesitter_search()
+        end,
+    },
+
+    -- plugin: nvim-treesitter-textobjects
+    ["<M-;>"] = { require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_next },
+    ["<M-,>"] = { require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_previous },
 }
 
 -- visual
-mappings["direct"]["x"] = {
+direct_mappings["x"] = {
     -- when line is wrapped, j/k moves between visual lines
     j = { [[v:count == 0 ? "gj" : "j"]], { expr = true } },
     k = { [[v:count == 0 ? "gk" : "k"]], { expr = true } },
@@ -254,10 +338,9 @@ mappings["direct"]["x"] = {
     ["]e"] = { "<Plug>(unimpaired-move-selection-down)gv" },
 
     -- plugin: nvim-spider
-    ["w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
-    ["b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    ["e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
-    ["ge"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
+    [",w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    [",b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    [",e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
 
     -- plugin: dial.nvim
     ["<C-a>"] = {
@@ -285,11 +368,35 @@ mappings["direct"]["x"] = {
         { noremap = false },
     },
 
-    -- plugin: leap.nvim
-    -- ["s"] = { "<Plug>(leap-forward)" },
-    -- ["S"] = { "<Plug>(leap-backward)" },
+    -- plugin: flash.nvim
+    ["s"] = {
+        function()
+            require("flash").jump()
+        end,
+    },
+    ["S"] = {
+        function()
+            require("flash").treesitter()
+        end,
+    },
+    ["R"] = {
+        function()
+            require("flash").treesitter_search()
+        end,
+    },
+
+    -- plugin: nvim-treesitter-textobjects
+    ["<M-;>"] = { require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_next },
+    ["<M-,>"] = { require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_previous },
 
     ["<leader>ds"] = { '<ESC>:lua require("dap-python").debug_selection()<CR>' },
+
+    -- plugin: refactoring.nvim
+    ["<M-r>"] = {
+        function()
+            require("telescope").extensions.refactoring.refactors()
+        end,
+    },
 
     ["<leader>re"] = { '<Esc><Cmd>lua require("refactoring").refactor("Extract Function")<CR>' },
     ["<leader>rf"] = { '<Esc><Cmd>lua require("refactoring").refactor("Extract Function To File")<CR>' },
@@ -301,107 +408,36 @@ mappings["direct"]["x"] = {
 }
 
 -- insert/command
-mappings["direct"]["i"] = {
+direct_mappings["i"] = {
     ["<C-p>"] = { "<C-r>*" }, -- paste from clipboard
 
+    -- easier vertical movement in insert mode
+    ["<C-j>"] = { "<Down>" },
+    ["<C-k>"] = { "<Up>" },
+
     -- plugin: nvim-spider
-    ["<C-w>"] = { [[<Esc>l<cmd>lua require("spider").motion("w")<CR>i]] },
-    ["<C-r>"] = { [[<Esc><cmd>lua require("spider").motion("b")<CR>i]] },
+    ["<C-l>"] = { [[<Esc>l<cmd>lua require("spider").motion("w")<CR>i]] },
+    ["<C-h>"] = { [[<Esc><cmd>lua require("spider").motion("b")<CR>i]] },
+
+    -- toggle global autocomplete flag
+    ["<C-c>"] = {
+        function()
+            vim.g.cmp_enabled = not vim.g.cmp_enabled
+        end,
+    },
 }
 
 -- command
-mappings["direct"]["c"] = {
-    ["<C-a>"] = { "<home>" },
-    ["<C-e>"] = { "<end>" },
-}
-
--- Plugin key configurations that is registered through plugin setup
-mappings["passthrough"] = {
-    after = {
-        bufferline = {
-            n = {
-                ["<M-h>"] = { "<cmd>BufferLineMovePrev<CR>" },
-                ["<M-l>"] = { "<cmd>BufferLineMoveNext<CR>" },
-            },
-        },
-    },
-
-    telescope = {
-        toggle_preview = "<A-p>",
-        close = "<C-c>",
-        open_trouble = "<C-t>",
-    },
-    treesitter = {
-        init_selection = "<C-s>",
-        node_incremental = "<C-s>l",
-        scope_incremental = "<C-s>",
-        node_decremental = "<C-s>h",
-    },
-    textobj = {
-        keymaps = {
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ab"] = "@block.outer",
-            ["ib"] = "@block.inner",
-            ["aa"] = "@parameter.outer",
-            ["ia"] = "@parameter.inner",
-        },
-        swap_next = {
-            ["<leader>sn"] = "@parameter.inner",
-        },
-        swap_previous = {
-            ["<leader>sp"] = "@parameter.inner",
-        },
-        goto_next_start = {
-            ["][c"] = "@class.outer",
-            ["][f"] = "@function.outer",
-            ["][b"] = "@block.outer",
-            ["][a"] = "@parameter.outer",
-        },
-        goto_next_end = {
-            ["]]c"] = "@class.outer",
-            ["]]f"] = "@function.outer",
-            ["]]b"] = "@block.outer",
-            ["]]a"] = "@parameter.outer",
-        },
-        goto_previous_start = {
-            ["[[c"] = "@class.outer",
-            ["[[f"] = "@function.outer",
-            ["[[b"] = "@block.outer",
-            ["[[p"] = "@parameter.outer",
-        },
-        goto_previous_end = {
-            ["[]c"] = "@class.outer",
-            ["[]f"] = "@function.outer",
-            ["[]b"] = "@block.outer",
-            ["[]p"] = "@parameter.outer",
-        },
-        peek_definition_code = {
-            ["<leader>pf"] = "@function.outer",
-            ["<leader>pc"] = "@class.outer",
-        },
-    },
-    lsp_signature = {
-        toggle = "<C-s>",
-    },
-    cmp = {
-        scroll_docs_up = "<C-u>",
-        scroll_docs_down = "<C-d>",
-        open_complete = "<C-z>",
-        disable_default = "<C-y>",
-        abort = "<C-e>",
-        prev_item = "<C-p>",
-        next_item = "<C-n>",
-        tab = "<Tab>",
-        shift_tab = "<S-Tab>",
+direct_mappings["c"] = {
+    -- <C-/> is registered as <C-_> in vim
+    ["<C-_>"] = {
+        function()
+            require("flash").toggle()
+        end,
     },
 }
 
 local M = {
-    passthrough = mappings.passthrough,
-
     set_keymap = function(mode, key, command, options)
         if options == nil then
             options = {}
@@ -425,7 +461,7 @@ local M = {
     register = function(self)
         -- all key modes, see map-modes in vimdoc
         local modes = { "", "n", "i", "v", "x", "c", "t", "o" }
-        local default_mappings = mappings["direct"]
+        local default_mappings = direct_mappings
         for _, mode in ipairs(modes) do
             if default_mappings[mode] ~= nil then
                 for key, val in pairs(default_mappings[mode]) do

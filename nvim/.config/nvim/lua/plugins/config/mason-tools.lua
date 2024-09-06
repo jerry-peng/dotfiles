@@ -5,6 +5,7 @@ local M = {}
 M.servers = {
     "clangd", -- C/C++
     "pyright", -- Python
+    "ruff", -- Python
     "rust_analyzer", -- Rust
     "tsserver", -- JS/TS
     "lua_ls", -- Lua
@@ -42,8 +43,6 @@ M.linters = {
 M.formatters = {
     -- rustfmt (Rust formatter) installed through rustup
     "clang-format", -- C/C++/Java/JavaScript/JSON/Objective-C/Protobuf/C#
-    "black", -- Python
-    "isort", -- Python; import sorter
     "stylua", -- Lua
     "prettierd", -- HTML/CSS/JavaScript/TypeScript/JSX/TSX/Vue/JSON/YAML/Markdown/etc
     "fourmolu", -- Haskell

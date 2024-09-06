@@ -2,7 +2,7 @@ local M = {}
 
 M.config = function()
     require("spider").setup({
-        skipInsignificantPunctuation = false,
+        skipInsignificantPunctuation = false, -- do not skip punctuations
     })
 end
 

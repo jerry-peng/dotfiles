@@ -1,9 +1,12 @@
+-- imported by lazy
 return {
     -- utilities
-    "christoomey/vim-tmux-navigator", -- integrated vim/tmux navigation
-    "tpope/vim-repeat", -- add `.` repeat on some other tpope plugins
+    -- "christoomey/vim-tmux-navigator", -- integrated vim/tmux navigation
+    "mrjones2014/smart-splits.nvim", -- split pane management with tmux integration
+    "tpope/vim-repeat", -- add `.` repeat on some other tpope
     "tpope/vim-unimpaired", -- useful mappings by tpope
     "tpope/vim-sleuth", -- auto-detect tab length
+    "mbbill/undotree", -- undo history visualizer
 
     -- tools
     {
@@ -12,10 +15,22 @@ return {
         ft = "markdown",
     },
     {
+        "MeanderingProgrammer/render-markdown.nvim",
+        opts = {},
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-tree/nvim-web-devicons",
+            "maxmx03/solarized.nvim", -- Load after color scheme
+        },
+        config = function()
+            require("plugins.config.render-markdown").config()
+        end,
+    },
+    {
         -- sets working directory to git root automatically
         "ahmedkhalf/project.nvim", -- project management
         config = function()
-            require("project_nvim").setup({})
+            require("project_nvim").setup()
         end,
     },
 
@@ -74,17 +89,6 @@ return {
     },
     {
         "folke/flash.nvim",
-        event = "VeryLazy",
-        ---@type Flash.Config
-        opts = {},
-        -- stylua: ignore
-        keys = {
-            { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-            { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-            { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-            { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-            { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-        },
     },
 
     -- search
@@ -98,6 +102,7 @@ return {
     -- theme
     {
         "maxmx03/solarized.nvim", -- GOAT theme
+        version = "2.3.0",
         config = function()
             require("plugins.config.colors").config()
         end,
@@ -113,7 +118,8 @@ return {
     {
         "nvim-tree/nvim-web-devicons", -- icons for filetypes, etc
         config = function()
-            require("plugins.config.devicons").config()
+            vim.o.background = "light" -- Devicons colors are set based on background color
+            require("nvim-web-devicons").setup()
         end,
     },
     {
@@ -156,6 +162,10 @@ return {
         dependencies = {
             { "nvim-tree/nvim-web-devicons", lazy = true },
         },
+        config = function()
+            require("grapple").setup()
+            require("grapple").prune() -- prune tag save files older than 30d
+        end,
     },
 
     -- buffers
@@ -214,20 +224,17 @@ return {
     },
     {
         "windwp/nvim-ts-autotag", -- autoclose/autorename html tag using treesitter
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+        },
+        config = function()
+            require("nvim-ts-autotag").setup()
+        end,
     },
     {
         "RRethy/nvim-treesitter-endwise", -- auto-append `end` for some languages (ruby/lua, etc) using treesitter
         config = function()
             require("nvim-treesitter.configs").setup({ endwise = { enable = true } })
-        end,
-    },
-    {
-        "ckolkey/ts-node-action", -- framework for running actions on treesitter nodes
-        dependencies = {
-            "nvim-treesitter/nvim-treesitter",
-        },
-        config = function()
-            require("ts-node-action").setup()
         end,
     },
     {
@@ -238,6 +245,17 @@ return {
         },
         config = function()
             require("refactoring").setup()
+        end,
+    },
+    {
+        "stevearc/aerial.nvim",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-tree/nvim-web-devicons",
+            "maxmx03/solarized.nvim", -- Load after color scheme
+        },
+        config = function()
+            require("plugins.config.aerial").config()
         end,
     },
 
@@ -255,16 +273,6 @@ return {
         },
         config = function()
             require("plugins.config.mason-tools").config()
-        end,
-    },
-    {
-        "nvimtools/none-ls.nvim", -- a LSP layer that allow other tools to inject diagnostics, code actions, etc.
-        dependencies = {
-            "WhoIsSethDaniel/mason-tool-installer.nvim",
-            "plenary.nvim",
-        },
-        config = function()
-            require("plugins.config.null-ls").config()
         end,
     },
     {
@@ -286,7 +294,7 @@ return {
         end,
     },
     {
-        "williamboman/mason-lspconfig.nvim", -- bridges mason and lspconfig, helps setup LSPs
+        "williamboman/mason-lspconfig", -- bridges mason and lspconfig, helps setup LSPs
         dependencies = {
             "WhoIsSethDaniel/mason-tool-installer.nvim",
             "neovim/nvim-lspconfig",
@@ -296,6 +304,7 @@ return {
         end,
     },
     {
+        -- TODO: need more configuration
         "mrcjkb/rustaceanvim", -- adds additional non-standard features specific to rust-analyzer
         version = "^4",
         ft = { "rust" },
@@ -303,7 +312,9 @@ return {
     {
         "smjonas/inc-rename.nvim", -- incremental rename
         config = function()
-            require("inc_rename").setup()
+            require("inc_rename").setup({
+                input_buffer_type = "dressing",
+            })
         end,
     },
 
@@ -326,6 +337,9 @@ return {
     {
         "hrsh7th/cmp-cmdline", -- command line source for completion
     },
+    {
+        "hrsh7th/cmp-nvim-lsp-signature-help", -- source for function signature help
+    },
 
     -- snippets
     {
@@ -342,13 +356,6 @@ return {
 
     -- LSP UI
     {
-        "ray-x/lsp_signature.nvim", -- LSP function signature hit
-        config = function()
-            require("plugins.config.lsp-signature").config()
-        end,
-    },
-    {
-
         "arkav/lualine-lsp-progress", -- show LSP index progress in statusline
     },
     {
@@ -358,7 +365,7 @@ return {
     {
         "folke/trouble.nvim", -- prettier diagnostics/references/telescope results/qflist/location list
         config = function()
-            require("trouble").setup({})
+            require("trouble").setup()
         end,
     },
 

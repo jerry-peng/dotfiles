@@ -1,4 +1,4 @@
-local keys = require("core.keymaps")
+local plugin_keys = require("core.key-passthru")
 local M = {}
 
 M.config = function()
@@ -6,13 +6,16 @@ M.config = function()
         -- treesitter base config
         ensure_installed = "all",
         sync_install = false,
+        -- enable highlighting
         highlight = {
             enable = true,
         },
+        -- set keymaps for incremental selection
         incremental_selection = {
             enable = true,
-            keymaps = keys.passthrough.treesitter,
+            keymaps = plugin_keys.treesitter,
         },
+        -- indentation based on treesitter
         indent = {
             enable = true,
         },
@@ -22,31 +25,26 @@ M.config = function()
             select = {
                 enable = true,
                 lookahead = true,
-                keymaps = keys.passthrough.textobj.keymaps,
+                keymaps = plugin_keys.textobj.keymaps,
             },
             swap = {
                 enable = true,
-                swap_next = keys.passthrough.textobj.swap_next,
-                swap_previous = keys.passthrough.textobj.swap_previous,
+                swap_next = plugin_keys.textobj.swap_next,
+                swap_previous = plugin_keys.textobj.swap_previous,
             },
             move = {
                 enable = true,
                 set_jumps = true, -- whether to set jumps in the jumplist
-                goto_next_start = keys.passthrough.textobj.goto_next_start,
-                goto_next_end = keys.passthrough.textobj.goto_next_end,
-                goto_previous_start = keys.passthrough.textobj.goto_previous_start,
-                goto_previous_end = keys.passthrough.textobj.goto_previous_end,
+                goto_next_start = plugin_keys.textobj.goto_next_start,
+                goto_next_end = plugin_keys.textobj.goto_next_end,
+                goto_previous_start = plugin_keys.textobj.goto_previous_start,
+                goto_previous_end = plugin_keys.textobj.goto_previous_end,
             },
             lsp_interop = {
                 enable = true,
                 border = "none",
-                peek_definition_code = keys.passthrough.textobj.peek_definition_code,
+                peek_definition_code = plugin_keys.textobj.peek_definition_code,
             },
-        },
-
-        -- nvim-ts-autotag
-        autotag = {
-            enable = true,
         },
 
         -- nvim-treesitter-endwise

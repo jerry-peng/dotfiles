@@ -22,11 +22,15 @@ vim.cmd([[
     augroup end
 ]])
 
--- override filetype formatoptions
-vim.cmd([[au BufWinEnter * set formatoptions=cqnj]])
-
 -- attack autocompletion for dap REPL
 vim.cmd([[au FileType dap-repl lua require('dap.ext.autocompl').attach()]])
 
 -- Fugitive TODO
 --autocmd BufReadPost fugitive://* set bufhidden=delete
+
+vim.api.nvim_create_autocmd({ "InsertLeave", "CmdlineLeave" }, {
+    callback = function()
+        -- force enable auto-completion when exiting insert/command mode
+        vim.g.cmp_enabled = true
+    end,
+})

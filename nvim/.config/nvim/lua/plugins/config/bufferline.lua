@@ -8,14 +8,13 @@ M.config = function()
                     filetype = "NvimTree",
                     text = "File Explorer",
                     highlight = "Directory",
-                    text_align = "center",
+                    text_align = "left",
                 },
             },
-            separator_style = "slant",
             show_buffer_close_icons = false,
             show_close_icon = false,
             diagnostics = "nvim_lsp",
-            diagnostics_indicator = function(count, level, diagnostics_dict, context)
+            diagnostics_indicator = function(count, level, _diagnostics_dict, _context)
                 local icon = level:match("error") and " " or " "
                 return " " .. icon .. count
             end,

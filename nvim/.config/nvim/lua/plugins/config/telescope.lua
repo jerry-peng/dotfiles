@@ -2,7 +2,7 @@ local telescope = require("telescope")
 local actions = require("telescope.actions")
 local action_layout = require("telescope.actions.layout")
 local trouble = require("trouble.sources.telescope")
-local keys = require("core.keymaps").passthrough.telescope
+local plugin_keys = require("core.key-passthru").telescope
 
 --[[
 Note:
@@ -52,15 +52,14 @@ M.config = function()
             },
             mappings = {
                 n = {
-                    [keys.toggle_preview] = action_layout.toggle_preview,
-                    [keys.close] = actions.close,
-                    [keys.open_trouble] = trouble.open,
+                    [plugin_keys.toggle_preview] = action_layout.toggle_preview,
+                    [plugin_keys.close] = actions.close,
+                    [plugin_keys.open_trouble] = trouble.open,
                 },
                 i = {
-                    ["<c-d>"] = actions.delete_buffer,
-                    ["<C-s>"] = actions.cycle_previewers_next,
-                    [keys.toggle_preview] = action_layout.toggle_preview,
-                    [keys.open_trouble] = trouble.open,
+                    [plugin_keys.cycle_previews_next] = actions.cycle_previewers_next,
+                    [plugin_keys.toggle_preview] = action_layout.toggle_preview,
+                    [plugin_keys.open_trouble] = trouble.open,
                 },
             },
             buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
@@ -78,6 +77,18 @@ M.config = function()
                 override_file_sorter = true,
                 case_mode = "smart_case",
             },
+            aerial = {
+                -- How to format the symbols
+                format_symbol = function(symbol_path, filetype)
+                    if filetype == "json" or filetype == "yaml" then
+                        return table.concat(symbol_path, ".")
+                    else
+                        return symbol_path[#symbol_path]
+                    end
+                end,
+                -- Available modes: symbols, lines, both
+                show_columns = "both",
+            },
         },
     })
 
@@ -85,6 +96,8 @@ M.config = function()
     telescope.load_extension("fzf")
     telescope.load_extension("dap")
     telescope.load_extension("projects")
+    telescope.load_extension("grapple")
+    telescope.load_extension("aerial")
 end
 
 return M

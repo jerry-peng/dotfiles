@@ -1,6 +1,6 @@
 local cmp = require("cmp")
 local luasnip = require("luasnip")
-local keys = require("core.keymaps").passthrough
+local plugin_keys = require("core.key-passthru")
 
 local has_words_before = function()
     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -10,6 +10,9 @@ end
 local M = {}
 
 M.config = function()
+    -- global flag to toggle cmp
+    vim.g.cmp_enabled = true
+
     luasnip.config.setup({
         -- event on which to leave snippet root if cursor is outside of its region
         -- this
@@ -27,32 +30,48 @@ M.config = function()
             end
             -- disable completion in comments unless in command mode
             local context = require("cmp.config.context")
-            if
-                context.in_treesitter_capture("comment")
-                and context.in_syntax_group("Comment")
-                and vim.api.nvim_get_mode().mode ~= "c"
-            then
+            if vim.api.nvim_get_mode().mode == "c" then
+                return true
+            elseif context.in_treesitter_capture("comment") or context.in_syntax_group("Comment") then
                 return false
             end
-            return true
+
+            return vim.g.cmp_enabled
         end,
+        -- disable preselecting entry
+        preselect = cmp.PreselectMode.None,
         sources = cmp.config.sources({
             { name = "nvim_lsp" },
             { name = "luasnip" },
+            { name = "nvim_lsp_signature_help" },
         }, {
             { name = "buffer" },
         }),
         mapping = {
-            [keys.cmp.scroll_docs_up] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
-            [keys.cmp.scroll_docs_down] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
-            [keys.cmp.open_complete] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
-            -- remove default `<C-y>` mapping.
-            [keys.cmp.disable_default] = cmp.config.disable,
-            [keys.cmp.abort] = cmp.mapping(cmp.mapping.abort(), { "i", "s", "c" }),
-            -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items
-            [keys.cmp.prev_item] = cmp.mapping.select_prev_item(),
-            [keys.cmp.next_item] = cmp.mapping.select_next_item(),
-            [keys.cmp.tab] = cmp.mapping(function(fallback)
+            [plugin_keys.cmp.scroll_docs_up] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "c" }),
+            [plugin_keys.cmp.scroll_docs_down] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "c" }),
+            [plugin_keys.cmp.prev_item] = cmp.mapping(function()
+                cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
+            end, { "i", "c" }),
+            [plugin_keys.cmp.next_item] = cmp.mapping(function()
+                cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
+            end, { "i", "c" }),
+            [plugin_keys.cmp.toggle] = cmp.mapping(function()
+                -- if cmp is enabled, disable cmp and close window
+                -- otherwise enable cmp and open completion window
+                if vim.g.cmp_enabled then
+                    vim.g.cmp_enabled = false
+                    cmp.close()
+                else
+                    vim.g.cmp_enabled = true
+                    cmp.complete()
+                end
+            end, { "i", "c" }),
+            -- abort restores completion insert changes
+            [plugin_keys.cmp.abort] = cmp.mapping(cmp.mapping.abort(), { "i", "s", "c" }),
+            [plugin_keys.cmp.tab] = cmp.mapping(function(fallback)
+                -- if completion window is visible, tab selects first entry
+                -- otherwise select selected entry
                 if cmp.visible() then
                     local entry = cmp.get_selected_entry()
                     if not entry then
@@ -64,13 +83,15 @@ M.config = function()
                 elseif luasnip.expand_or_jumpable() then
                     luasnip.expand_or_jump()
                 elseif has_words_before() then
+                    -- if there are words before cursor, open completion window
                     cmp.complete()
                 else
                     fallback()
                 end
             end, { "i", "s", "c" }),
-            [keys.cmp.shift_tab] = cmp.mapping(function(fallback)
+            [plugin_keys.cmp.shift_tab] = cmp.mapping(function(fallback)
                 if cmp.visible() then
+                    -- if completion window is visible, close it, useful in snippet
                     cmp.close()
                 elseif luasnip.jumpable(-1) then
                     luasnip.jump(-1)
@@ -109,13 +130,14 @@ M.config = function()
     })
 
     -- auto-completion for search
-    cmp.setup.cmdline("/", {
+    cmp.setup.cmdline({ "/", "?" }, {
         sources = { { name = "buffer" } },
     })
 
     -- auto-completion for command line
     cmp.setup.cmdline(":", {
         sources = cmp.config.sources({ { name = "path" } }, { { name = "cmdline" } }),
+        matching = { disallow_symbol_nonprefix_matching = false },
     })
 
     -- insert function parenthesis when auto-completing functions

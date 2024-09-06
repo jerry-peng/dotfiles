@@ -48,6 +48,17 @@ M.config = function()
                 TelescopeResultsTitle = { fg = colors.base02, bg = colors.base02, reverse = false },
                 -- preview
                 TelescopePreviewTitle = { fg = colors.base02, bg = colors.magenta, reverse = false },
+
+                --[[ render-markdown.nvim ]]
+                RenderMarkdownH1Bg = { bg = colors.green, fg = colors.base02 },
+                RenderMarkdownH2Bg = { bg = colors.cyan, fg = colors.base02 },
+                RenderMarkdownH3Bg = { bg = colors.blue, fg = colors.base02 },
+                RenderMarkdownH4Bg = { bg = colors.violet, fg = colors.base02 },
+                RenderMarkdownH5Bg = { bg = colors.magenta, fg = colors.base02 },
+                RenderMarkdownH6Bg = { bg = colors.orange, fg = colors.base02 },
+
+                --[[ aerial.nvim ]]
+                AerialLine = { bg = colors.base01, fg = colors.base03 },
             }
         end,
     })
