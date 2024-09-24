@@ -2,6 +2,7 @@ local HOME = os.getenv("HOME")
 local opt = vim.opt
 
 vim.g.mapleader = " " -- leader key
+vim.g.maplocalleader = "," -- local leader key
 
 -- Basic settings
 opt.encoding = "utf-8"
@@ -9,6 +10,7 @@ opt.backspace = "indent,eol,start" -- backspace works on every char in insert mo
 opt.completeopt = "menu,menuone,noselect" -- completion options: show popup menu when there are selections, and do not select a match in menu
 opt.shell = "/usr/local/bin/zsh" -- zsh as default shell
 opt.dictionary = "/usr/share/dict/words" -- file path to spell check dictionary
+opt.spelllang = { "en" } -- use english for spellcheck
 opt.startofline = true -- cursor is moved to first non-blank char when using some move commands
 opt.hidden = true -- opening a new file when current buffer has unsaved changes causes current buffer file to be hidden instead of closed
 opt.path = opt.path + "~,.,**" -- path searched when using various find commands (** means every file recursively in current directory)
@@ -17,7 +19,7 @@ opt.autoread = true -- automatically load file without prompt if file changes
 opt.updatetime = 250 -- the amount of time in ms to trigger CursorHold event
 opt.mouse = "" -- disable mouse control
 
--- Mapping waiting time
+-- Mapping wait time
 -- For more info: https://vi.stackexchange.com/questions/24925/usage-of-timeoutlen-and-ttimeoutlen
 opt.timeout = true -- mapping sequence timeout
 opt.ttimeout = true -- key code timeout
@@ -28,12 +30,13 @@ opt.ttimeoutlen = 5 -- the amount of time to wait for key code sequences
 opt.termguicolors = true
 opt.showmatch = true -- show matching brackets
 opt.lazyredraw = true -- buffer screen updates
-opt.scrolloff = 3 -- always show 3 rows from edge of the screen
-opt.sidescrolloff = 5 -- always show 5 columns from edge of the screen
+opt.scrolloff = 5 -- always show rows from edge of the screen
+opt.sidescrolloff = 10 -- always show columns from edge of the screen
 opt.synmaxcol = 180 -- stop syntax highlight after x'th column for performance
 opt.laststatus = 2 -- always show status line
 opt.linebreak = true -- wrap line at character in 'breakat' option
 opt.showbreak = "↳  " -- show wrap character
+opt.list = true -- show invisible characters (tabs, etc)
 opt.listchars = {
     eol = "↲",
     tab = "▶ ",
@@ -45,18 +48,23 @@ opt.listchars = {
 }
 opt.cursorline = true -- highlight cursor line
 opt.virtualedit = "block" -- allow block selection in visual block mode past EOL
+opt.conceallevel = 0 -- do not conceal markup in markdown
+opt.pumheight = 20 -- maximum number of entries in a popup
 
 -- Side columns
 opt.modelines = 0 -- disable for security reasons
 opt.number = true -- enable line number
 opt.relativenumber = true -- enable relative number
+opt.signcolumn = "auto:2-4" -- sign column have minimum 2 columns, can auto-resize to 4
 
 -- Search
 opt.incsearch = true -- starts searching as soon as typing
 opt.ignorecase = true -- ignore case when searching
-opt.smartcase = true -- case insentive unless capitals used in search
+opt.smartcase = true -- case-insensitive unless capitals used in search
 opt.wildignorecase = true -- ignore case when completing file names and dirs
 opt.inccommand = "nosplit" -- start substitution as soon as typing
+opt.grepprg = "rg --vimgrep" -- use rg for grep; --vimgrep ensures rg output can be parsed by vim
+opt.grepformat = "%f:%l:%c:%m" -- rg output format
 
 -- Match pair
 opt.matchtime = 2 -- delay before showing matching paren (tenth of a second)
@@ -93,7 +101,7 @@ opt.backupdir = HOME .. "/.config/nvim/.backup//"
 -- Undo files
 opt.undofile = true -- enable storing undo
 opt.undodir = HOME .. "/.config/nvim/.undo//"
-opt.undolevels = 1000
+opt.undolevels = 10000
 
 -- Wildmenu
 opt.wildignore = { ".git", ".hg", ".svn", "*.pyc", "*.o", "*.out", "*.jpg", "*.jpeg", "*.png", "*.gif", "*.zip" }
@@ -103,12 +111,16 @@ opt.wildmode = { "full", "list", "full" }
 -- Window
 opt.splitbelow = true -- split window below
 opt.splitright = true -- split window right
+opt.winheight = 3 -- minimum height of a window
+opt.winwidth = 10 -- minimum width of a window
+opt.winminheight = 3 -- minimum height of a window when shrunk
+opt.winminwidth = 10 -- minimum height of a window when shrunk
 
 -- Fold
 opt.foldmethod = "expr"
 opt.foldexpr = "v:lua.vim.treesitter.foldexpr()" -- fold detection with treesitter
 opt.foldtext = "" -- enable syntax highlighting on fold text
-opt.fillchars:append("fold:<") -- fold text filler char
+opt.fillchars:append({ diff = "╱" }) -- fold text filler char
 opt.foldenable = true -- enable folding at startup
 opt.foldlevel = 99 -- minimum level of fold closed by default, prevent folding when opening files
 

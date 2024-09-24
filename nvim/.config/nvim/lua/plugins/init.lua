@@ -1,12 +1,16 @@
 -- imported by lazy
 return {
     -- utilities
-    -- "christoomey/vim-tmux-navigator", -- integrated vim/tmux navigation
-    "mrjones2014/smart-splits.nvim", -- split pane management with tmux integration
+    "christoomey/vim-tmux-navigator", -- navigate between vim windows and tmux panes
     "tpope/vim-repeat", -- add `.` repeat on some other tpope
     "tpope/vim-unimpaired", -- useful mappings by tpope
     "tpope/vim-sleuth", -- auto-detect tab length
     "mbbill/undotree", -- undo history visualizer
+    {
+        "chrisgrieser/nvim-early-retirement", -- removes buffer after x minutes of inactivity
+        config = true,
+        event = "VeryLazy",
+    },
 
     -- tools
     {
@@ -15,7 +19,7 @@ return {
         ft = "markdown",
     },
     {
-        "MeanderingProgrammer/render-markdown.nvim",
+        "MeanderingProgrammer/render-markdown.nvim", -- renders markdown in Neovim
         opts = {},
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
@@ -35,11 +39,17 @@ return {
     },
 
     -- git
-    "tpope/vim-fugitive", -- best git integration plugin
+    "tpope/vim-fugitive", -- GOAT git integration plugin
     {
-        "lewis6991/gitsigns.nvim",
+        "lewis6991/gitsigns.nvim", -- shows git diffs in sign column
         config = function()
             require("plugins.config.gitsigns").config()
+        end,
+    },
+    {
+        "sindrets/diffview.nvim", -- git diff and history viewer
+        config = function()
+            require("plugins.config.diffview").config()
         end,
     },
 
@@ -87,9 +97,7 @@ return {
             require("plugins.config.spider").config()
         end,
     },
-    {
-        "folke/flash.nvim",
-    },
+    "folke/flash.nvim", -- enables easier code jumps
 
     -- search
     {
@@ -104,7 +112,7 @@ return {
         "maxmx03/solarized.nvim", -- GOAT theme
         version = "2.3.0",
         config = function()
-            require("plugins.config.colors").config()
+            require("plugins.config.solarized").config()
         end,
     },
 
@@ -138,9 +146,7 @@ return {
             require("plugins.config.lualine").config()
         end,
     },
-    {
-        "stevearc/dressing.nvim", -- enhanced input/select window using telescope
-    },
+    "stevearc/dressing.nvim", -- enhanced input/select window using telescope
 
     -- files
     {
@@ -158,7 +164,7 @@ return {
         end,
     },
     {
-        "cbochs/grapple.nvim",
+        "cbochs/grapple.nvim", -- file tagging
         dependencies = {
             { "nvim-tree/nvim-web-devicons", lazy = true },
         },
@@ -189,6 +195,7 @@ return {
         dependencies = {
             "nvim-lua/plenary.nvim",
             "nvim-telescope/telescope-fzf-native.nvim",
+            "folke/trouble.nvim",
         },
         config = function()
             require("plugins.config.telescope").config()
@@ -211,7 +218,7 @@ return {
         "nvim-treesitter/nvim-treesitter-textobjects", -- text objects based on treesitter AST
     },
     {
-        "Wansmer/treesj",
+        "Wansmer/treesj", -- smart code split/join using treesitter
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
         },
@@ -234,7 +241,7 @@ return {
     {
         "RRethy/nvim-treesitter-endwise", -- auto-append `end` for some languages (ruby/lua, etc) using treesitter
         config = function()
-            require("nvim-treesitter.configs").setup({ endwise = { enable = true } })
+            require("plugins.config.treesitter-endwise").config()
         end,
     },
     {
@@ -248,7 +255,7 @@ return {
         end,
     },
     {
-        "stevearc/aerial.nvim",
+        "stevearc/aerial.nvim", -- code outline window using treesitter, LSP as fallback
         dependencies = {
             "nvim-treesitter/nvim-treesitter",
             "nvim-tree/nvim-web-devicons",
@@ -256,6 +263,21 @@ return {
         },
         config = function()
             require("plugins.config.aerial").config()
+        end,
+    },
+    {
+        "RRethy/vim-illuminate", -- highlight identical symnbols
+        dependencies = {
+            "maxmx03/solarized.nvim", -- Load after color scheme
+        },
+        config = function()
+            require("illuminate").configure({})
+        end,
+    },
+    {
+        "danymat/neogen",
+        config = function()
+            require("plugins.config.neogen").config() -- comment annotation generator using treesitter
         end,
     },
 
@@ -303,6 +325,38 @@ return {
             require("plugins.config.lspconfig").config()
         end,
     },
+
+    -- completion
+    {
+        "hrsh7th/nvim-cmp", -- auto-completion
+        config = function()
+            require("plugins.config.cmp").config()
+        end,
+    },
+    "hrsh7th/cmp-nvim-lsp", -- LSP source for completion
+    "hrsh7th/cmp-buffer", -- buffer source for completion
+    "hrsh7th/cmp-path", -- path source for completion
+    "hrsh7th/cmp-cmdline", -- command line source for completion
+    "hrsh7th/cmp-nvim-lsp-signature-help", -- source for function signature help
+    "onsails/lspkind.nvim", -- kind icons in auto-completion entries
+
+    -- snippets
+    {
+        "L3MON4D3/LuaSnip", -- snippet library
+        version = "v2.*",
+        build = "make install_jsregexp",
+    },
+    "saadparwaiz1/cmp_luasnip", -- luasnip source for completion
+    "rafamadriz/friendly-snippets", -- sensible default snippets
+
+    -- LSP enhancements
+    "arkav/lualine-lsp-progress", -- show LSP index progress in statusline
+    {
+        "folke/trouble.nvim", -- prettier diagnostics/references/telescope results/qflist/location list
+        config = function()
+            require("trouble").setup({})
+        end,
+    },
     {
         -- TODO: need more configuration
         "mrcjkb/rustaceanvim", -- adds additional non-standard features specific to rust-analyzer
@@ -312,60 +366,30 @@ return {
     {
         "smjonas/inc-rename.nvim", -- incremental rename
         config = function()
-            require("inc_rename").setup({
-                input_buffer_type = "dressing",
-            })
-        end,
-    },
-
-    -- completion
-    {
-        "hrsh7th/nvim-cmp", -- auto-completion
-        config = function()
-            require("plugins.config.cmp").config()
+            require("plugins.config.inc-rename").config()
         end,
     },
     {
-        "hrsh7th/cmp-nvim-lsp", -- LSP source for completion
-    },
-    {
-        "hrsh7th/cmp-buffer", -- buffer source for completion
-    },
-    {
-        "hrsh7th/cmp-path", -- path source for completion
-    },
-    {
-        "hrsh7th/cmp-cmdline", -- command line source for completion
-    },
-    {
-        "hrsh7th/cmp-nvim-lsp-signature-help", -- source for function signature help
-    },
-
-    -- snippets
-    {
-        "L3MON4D3/LuaSnip", -- snippet library
-        version = "v2.*",
-        build = "make install_jsregexp",
-    },
-    {
-        "saadparwaiz1/cmp_luasnip", -- luasnip source for completion
-    },
-    {
-        "rafamadriz/friendly-snippets", -- sensible default snippets
-    },
-
-    -- LSP UI
-    {
-        "arkav/lualine-lsp-progress", -- show LSP index progress in statusline
-    },
-    {
-
-        "onsails/lspkind.nvim", -- kind icons in auto-completion entries
-    },
-    {
-        "folke/trouble.nvim", -- prettier diagnostics/references/telescope results/qflist/location list
+        "kosayoda/nvim-lightbulb", -- show symbol when a line has code action
         config = function()
-            require("trouble").setup()
+            require("plugins.config.lightbulb").config()
+        end,
+    },
+    {
+        "aznhe21/actions-preview.nvim", -- show code action preview
+        config = function()
+            require("actions-preview").setup({})
+        end,
+    },
+    {
+        "utilyre/barbecue.nvim", -- show code breadcrumbs in winbar
+        dependencies = {
+            "SmiteshP/nvim-navic",
+            "nvim-tree/nvim-web-devicons", -- optional dependency
+            "maxmx03/solarized.nvim", -- Load after color scheme
+        },
+        config = function()
+            require("plugins.config.barbecue").config()
         end,
     },
 
@@ -375,6 +399,12 @@ return {
         build = "bash ./install.sh",
         config = function()
             require("plugins.config.sniprun").config()
+        end,
+    },
+    {
+        "Olical/conjure", -- interactive evaluation
+        config = function()
+            require("plugins.config.conjure").config()
         end,
     },
 

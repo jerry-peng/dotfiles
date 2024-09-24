@@ -1,4 +1,4 @@
-local colors = require("plugins.config.colors").colors
+local solarized_light = require("plugins.config.colors").solarized_light
 
 local M = {}
 
@@ -16,13 +16,13 @@ M.config = function()
     -- every time the colorscheme changes
     local hooks = require("ibl.hooks")
     hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-        vim.api.nvim_set_hl(0, "RainbowRed", { fg = colors.red })
-        vim.api.nvim_set_hl(0, "RainbowYellow", { fg = colors.yellow })
-        vim.api.nvim_set_hl(0, "RainbowBlue", { fg = colors.blue })
-        vim.api.nvim_set_hl(0, "RainbowOrange", { fg = colors.orange })
-        vim.api.nvim_set_hl(0, "RainbowGreen", { fg = colors.green })
-        vim.api.nvim_set_hl(0, "RainbowViolet", { fg = colors.violet })
-        vim.api.nvim_set_hl(0, "RainbowCyan", { fg = colors.cyan })
+        vim.api.nvim_set_hl(0, "RainbowRed", { fg = solarized_light.red })
+        vim.api.nvim_set_hl(0, "RainbowYellow", { fg = solarized_light.yellow })
+        vim.api.nvim_set_hl(0, "RainbowBlue", { fg = solarized_light.blue })
+        vim.api.nvim_set_hl(0, "RainbowOrange", { fg = solarized_light.orange })
+        vim.api.nvim_set_hl(0, "RainbowGreen", { fg = solarized_light.green })
+        vim.api.nvim_set_hl(0, "RainbowViolet", { fg = solarized_light.violet })
+        vim.api.nvim_set_hl(0, "RainbowCyan", { fg = solarized_light.cyan })
     end)
 
     vim.g.rainbow_delimiters = { highlight = highlight }

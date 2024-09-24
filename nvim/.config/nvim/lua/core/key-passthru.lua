@@ -1,5 +1,9 @@
 -- Plugin key configurations that is registered through plugin setup
 local mappings = {
+    help = {
+        enter = "<CR>",
+        back = "<BS>",
+    },
     telescope = {
         toggle_preview = "<C-o>",
         close = "<C-c>",

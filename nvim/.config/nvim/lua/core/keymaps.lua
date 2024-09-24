@@ -19,12 +19,12 @@ direct_mappings["n"] = {
     ["?"] = { "/\\v" },
 
     -- window pane adjustment
-    ["<leader>w-"] = { "<c-w>=" }, -- shrink pane
-    ["<leader>w="] = { "<C-w><Bar><C-w>_<CR>" }, -- enlarge pane
-    ["<leader>wh"] = { "<C-w>5<" }, -- shift pane's right edge leftward by 5
-    ["<leader>wj"] = { "<cmd>resize +5<cr>" }, -- shift pane's bottom edge upward by 5
-    ["<leader>wk"] = { "<cmd>resize -5<cr>" }, -- shift pane's bottom edge downward by 5
-    ["<leader>wl"] = { "<C-w>5>" }, -- shift pane's right edge rightward by 5
+    ["<M-Up>"] = { "<cmd>resize +5<CR>" },
+    ["<M-Down>"] = { "<cmd>resize -5<CR>" },
+    ["<M-Left>"] = { "<cmd>vertical resize -5<CR>" },
+    ["<M-Right>"] = { "<cmd>vertical resize +5<CR>" },
+    ["<M-->"] = { "<c-w>=" }, -- shrink pane
+    ["<M-=>"] = { "<C-w><Bar><C-w>_<CR>" }, -- enlarge pane
 
     -- clipboard copy/paste
     ["<M-y>"] = { [["*y]] },
@@ -32,27 +32,17 @@ direct_mappings["n"] = {
     ["<M-p>"] = { [["*p]] },
 
     -- clear search highlight
-    ["<leader>c"] = { ":noh<CR>" },
-
-    -- close floating window
-    ["<leader>q"] = { [[<cmd>lua require"core.utils".close_float_windows()<CR>]] },
+    ["<M-c>"] = { ":noh<CR>" },
 
     -- Send search results to quickfix list
-    ["<leader>/"] = { [[<cmd>execute "vimgrep /".@/."/g %"<CR>:copen<CR>]] },
+    ["<leader>/"] = { [[<cmd>execute "vimgrep /".@/."/g %"<CR>]] },
 
     -- plugin: undotree
     ["<M-u>"] = { vim.cmd.UndotreeToggle },
 
-    -- plugin: smart-splits.nvim
-    ["<M-w>"] = { require("smart-splits").start_resize_mode },
-    ["<C-h>"] = { require("smart-splits").move_cursor_left },
-    ["<C-j>"] = { require("smart-splits").move_cursor_down },
-    ["<C-k>"] = { require("smart-splits").move_cursor_up },
-    ["<C-l>"] = { require("smart-splits").move_cursor_right },
-
     -- plugin: markdown-preview.nvim
     ["<M-m>"] = { "<cmd>MarkdownPreview<CR>" },
-    ["<M-t>"] = { "<cmd>RenderMarkdown toggle<CR>" },
+    [",t"] = { "<cmd>RenderMarkdown toggle<CR>" },
 
     -- plugin: gitsigns.nvim
     -- use "[c" and "]c" in diff mode, otherwise use gitsigns to jump to hunk
@@ -75,6 +65,11 @@ direct_mappings["n"] = {
         end,
     },
 
+    -- plugin: diffview.nvim
+    ["<leader>gf"] = { "<cmd>DiffviewOpen<CR>" },
+    ["<leader>gc"] = { "<cmd>DiffviewClose<CR>" },
+    ["<leader>gh"] = { "<cmd>DiffviewFileHistory<CR>" },
+
     -- plugin: nvim-tree.lua
     ["<M-n>"] = { "<cmd>NvimTreeToggle<CR>" },
 
@@ -95,11 +90,14 @@ direct_mappings["n"] = {
     -- plugin: vim-bbye
     ["<M-q>"] = { "<cmd>Bdelete<CR>" },
     ["<M-Q>"] = { "<cmd>Bdelete!<CR>" },
+    ["<leader>q"] = { "<cmd>Bdelete<CR><cmd>q<CR>" },
+    ["<leader>Q"] = { "<cmd>Bdelete!<CR><cmd>q<CR>" },
 
     -- plugin: nvim-spider
-    [",w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
-    [",b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    [",e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
 
     -- plugin: flash.nvim
     ["s"] = {
@@ -131,19 +129,19 @@ direct_mappings["n"] = {
     ["-"] = { "<cmd>Oil<CR>" },
 
     -- plugin: grapple.nvim
-    [",t"] = { require("grapple").toggle },
-    [",g"] = { require("grapple").open_tags },
-    [",n"] = { "<cmd>Grapple cycle_tags next<cr>" },
-    [",p"] = { "<cmd>Grapple cycle_tags prev<cr>" },
-    [",1"] = { "<cmd>Grapple select index=1<cr>" },
-    [",2"] = { "<cmd>Grapple select index=2<cr>" },
-    [",3"] = { "<cmd>Grapple select index=3<cr>" },
-    [",4"] = { "<cmd>Grapple select index=4<cr>" },
-    [",5"] = { "<cmd>Grapple select index=5<cr>" },
-    [",6"] = { "<cmd>Grapple select index=6<cr>" },
-    [",7"] = { "<cmd>Grapple select index=7<cr>" },
-    [",8"] = { "<cmd>Grapple select index=8<cr>" },
-    [",9"] = { "<cmd>Grapple select index=9<cr>" },
+    ["<M-t>"] = { require("grapple").toggle },
+    ["<M-g>"] = { require("grapple").open_tags },
+    ["<M-]>"] = { "<cmd>Grapple cycle_tags next<cr>" },
+    ["<M-[>"] = { "<cmd>Grapple cycle_tags prev<cr>" },
+    ["<M-1>"] = { "<cmd>Grapple select index=1<cr>" },
+    ["<M-2>"] = { "<cmd>Grapple select index=2<cr>" },
+    ["<M-3>"] = { "<cmd>Grapple select index=3<cr>" },
+    ["<M-4>"] = { "<cmd>Grapple select index=4<cr>" },
+    ["<M-5>"] = { "<cmd>Grapple select index=5<cr>" },
+    ["<M-6>"] = { "<cmd>Grapple select index=6<cr>" },
+    ["<M-7>"] = { "<cmd>Grapple select index=7<cr>" },
+    ["<M-8>"] = { "<cmd>Grapple select index=8<cr>" },
+    ["<M-9>"] = { "<cmd>Grapple select index=9<cr>" },
 
     -- plugin: bufferline.nvim
     ["<Tab>"] = { "<cmd>BufferLineCycleNext<CR>" },
@@ -179,6 +177,8 @@ direct_mappings["n"] = {
     ["<leader>fc"] = { [[<cmd>lua require("telescope.builtin").commands()<CR>]] },
     ["<leader>fx"] = { [[<cmd>lua require("telescope.builtin").command_history()<CR>]] },
     ["<leader>fs"] = { [[<cmd>lua require("telescope.builtin").search_history()<CR>]] },
+    ["<leader>fq"] = { [[<cmd>lua require("telescope.builtin").quickfix()<CR>]] },
+    ["<leader>fw"] = { [[<cmd>lua require("telescope.builtin").quickfixhistory()<CR>]] },
 
     -- plugin: projects.nvim extension for telescope.nvim
     ["<leader>fp"] = {
@@ -196,7 +196,7 @@ direct_mappings["n"] = {
     ["<M-,>"] = { require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_previous },
 
     -- plugin: treesj
-    ["<M-j>"] = { [[<cmd>lua require("treesj").toggle()<CR>]] },
+    [",j"] = { [[<cmd>lua require("treesj").toggle()<CR>]] },
 
     -- plugin: refactoring.nvim
     ["<M-r>"] = {
@@ -210,6 +210,13 @@ direct_mappings["n"] = {
     ["{"] = { "<cmd>AerialPrev<CR>" },
     ["}"] = { "<cmd>AerialNext<CR>" },
 
+    -- plugin: neogen.lua
+    [",a"] = {
+        function()
+            require("neogen").generate()
+        end,
+    },
+
     -- plugin: nvim-lspconfig
     gd = { "<cmd>lua vim.lsp.buf.declaration()<CR>" },
     gr = { "<cmd>lua vim.lsp.buf.references()<CR>" },
@@ -219,9 +226,27 @@ direct_mappings["n"] = {
     ["<leader>ll"] = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>" },
     ["<leader>lt"] = { "<cmd>lua vim.lsp.buf.type_definition()<CR>" },
     ["<leader>lr"] = { ":IncRename " },
-    ["<leader>lc"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>" },
+    ["<leader>lc"] = {
+        function()
+            require("actions-preview").code_actions()
+        end,
+    },
     ["<leader>dd"] = { "<cmd>lua vim.diagnostic.open_float()<CR>" },
     ["<leader>dq"] = { "<cmd>lua vim.diagnostic.setqflist()<CR>" },
+
+    -- plugin: trouble.nvim
+    ["<leader>tt"] = { "<cmd>Trouble<cr>" },
+    ["<leader>td"] = { "<cmd>Trouble diagnostics toggle win.size=0.3<cr>" },
+    ["<leader>tc"] = { "<cmd>Trouble diagnostics toggle filter.buf=0 win.size=0.3<cr>" },
+    ["<leader>ts"] = { "<cmd>Trouble symbols toggle focus=false win.size=0.3<cr>" },
+    ["<leader>tl"] = { "<cmd>Trouble lsp toggle focus=false win.size=0.3<cr>" },
+    ["<leader>tq"] = { "<cmd>Trouble qflist toggle win.size=0.3<cr>" },
+
+    -- plugin: sniprun
+    ["<leader>ss"] = { "<cmd>SnipRun<CR>" },
+    ["<leader>sr"] = { "<cmd>SnipReset<CR>" },
+    ["<leader>sc"] = { "<cmd>SnipClose<CR>" },
+    ["<leader>sm"] = { "<cmd>SnipReplMemoryClean<CR>" },
 
     ["<leader>db"] = { '<cmd>lua require"dap".toggle_breakpoint()<CR>' },
     ["<leader>dc"] = { '<cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>' },
@@ -247,12 +272,6 @@ direct_mappings["n"] = {
     ["<leader>dfv"] = { "<cmd>Telescope dap variables<CR>" },
     ["<leader>dff"] = { "<cmd>Telescope dap frames<CR>" },
 
-    ["<leader>ss"] = { "<cmd>SnipRun<CR>" },
-    ["<leader>sr"] = { "<cmd>SnipReset<CR>" },
-    ["<leader>sc"] = { "<cmd>SnipClose<CR>" },
-    ["<leader>si"] = { "<cmd>SnipInfo<CR>" },
-    ["<leader>sm"] = { "<cmd>SnipReplMemoryClean<CR>" },
-
     ["<leader>uu"] = { "<cmd>Ultest<CR>" },
     ["<leader>un"] = { "<cmd>UltestNearest<CR>" },
     ["<leader>ul"] = { "<cmd>UltestLast<CR>" },
@@ -265,15 +284,6 @@ direct_mappings["n"] = {
     ["<leader>uc"] = { "<cmd>UltestClear<CR>" },
     ["[t"] = { "<Plug>(ultest-prev-fail)", { noremap = false } },
     ["]t"] = { "<Plug>(ultest-next-fail)", { noremap = false } },
-
-    -- gr = { "<cmd>TroubleToggle lsp_references<cr>" },
-    ["<leader>xx"] = { "<cmd>TroubleToggle<cr>" },
-    ["<leader>xw"] = { "<cmd>TroubleToggle workspace_diagnostics<cr>" },
-    ["<leader>xd"] = { "<cmd>TroubleToggle document_diagnostics<cr>" },
-    ["<leader>xq"] = { "<cmd>TroubleToggle quickfix<cr>" },
-    ["<leader>xl"] = { "<cmd>TroubleToggle loclist<cr>" },
-    ["[x"] = { ':lua require("trouble").next({skip_groups = true, jump = true});<CR>' },
-    ["]x"] = { ':lua require("trouble").previous({skip_groups = true, jump = true});<CR>' },
 }
 
 -- operator-pending
@@ -282,9 +292,10 @@ direct_mappings["o"] = {
     il = { "<cmd>norm vil<CR>" },
 
     -- plugin: nvim-spider
-    [",w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
-    [",b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    [",e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
 
     -- plugin: flash.nvim
     ["s"] = {
@@ -338,9 +349,10 @@ direct_mappings["x"] = {
     ["]e"] = { "<Plug>(unimpaired-move-selection-down)gv" },
 
     -- plugin: nvim-spider
-    [",w"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
-    [",b"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    [",e"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
 
     -- plugin: dial.nvim
     ["<C-a>"] = {
@@ -404,7 +416,11 @@ direct_mappings["x"] = {
     ["<leader>ri"] = { '<Esc><Cmd>lua require("refactoring").refactor("Inline Variable")<CR>' },
 
     ["<leader>ss"] = { ":'<,'>SnipRun<CR>" },
-    ["<leader>lc"] = { "<cmd>lua vim.lsp.buf.code_action()<CR>" },
+    ["<leader>lc"] = {
+        function()
+            require("actions-preview").code_actions()
+        end,
+    },
 }
 
 -- insert/command
@@ -416,8 +432,10 @@ direct_mappings["i"] = {
     ["<C-k>"] = { "<Up>" },
 
     -- plugin: nvim-spider
-    ["<C-l>"] = { [[<Esc>l<cmd>lua require("spider").motion("w")<CR>i]] },
-    ["<C-h>"] = { [[<Esc><cmd>lua require("spider").motion("b")<CR>i]] },
+    ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
+    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
 
     -- toggle global autocomplete flag
     ["<C-c>"] = {

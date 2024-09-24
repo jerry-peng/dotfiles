@@ -1,4 +1,4 @@
-local colors = require("plugins.config.colors").colors
+local solarized_light = require("plugins.config.colors").solarized_light
 local M = {}
 
 M.config = function()
@@ -9,10 +9,10 @@ M.config = function()
             "TerminalWithCode",
         },
         snipruncolors = {
-            SniprunVirtualTextOk = { bg = colors.cyan, fg = colors.base0 },
-            SniprunFloatingWinOk = { bg = colors.cyan, fg = colors.base0 },
-            SniprunVirtualTextErr = { bg = colors.orange, fg = colors.base0 },
-            SniprunFloatingWinErr = { bg = colors.orange, fg = colors.base0 },
+            SniprunVirtualTextOk = { bg = solarized_light.cyan, fg = solarized_light.base0 },
+            SniprunFloatingWinOk = { bg = solarized_light.cyan, fg = solarized_light.base0 },
+            SniprunVirtualTextErr = { bg = solarized_light.orange, fg = solarized_light.base0 },
+            SniprunFloatingWinErr = { bg = solarized_light.orange, fg = solarized_light.base0 },
         },
     })
 end
