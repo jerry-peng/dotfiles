@@ -28,7 +28,7 @@ export EDITOR="$VISUAL"
 export KEYTIMEOUT=1
 
 # Shell variables
-export LESS='-F -i -J -M -R -W -x4 -X -z-4'
+export LESS='iMRS'
 export PAGER=less
 
 # Command Alias

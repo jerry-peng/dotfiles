@@ -225,9 +225,10 @@ direct_mappings["n"] = {
     ["<leader>ld"] = { "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>" },
     ["<leader>ll"] = { "<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>" },
     ["<leader>lt"] = { "<cmd>lua vim.lsp.buf.type_definition()<CR>" },
-    ["<leader>lr"] = { ":IncRename " },
+    ["<leader>lr"] = { ":IncRename " }, -- plugin: inc-rename.nvim
     ["<leader>lc"] = {
         function()
+            -- plugin: actions-preview.nvim
             require("actions-preview").code_actions()
         end,
     },
@@ -235,18 +236,26 @@ direct_mappings["n"] = {
     ["<leader>dq"] = { "<cmd>lua vim.diagnostic.setqflist()<CR>" },
 
     -- plugin: trouble.nvim
-    ["<leader>tt"] = { "<cmd>Trouble<cr>" },
-    ["<leader>td"] = { "<cmd>Trouble diagnostics toggle win.size=0.3<cr>" },
-    ["<leader>tc"] = { "<cmd>Trouble diagnostics toggle filter.buf=0 win.size=0.3<cr>" },
-    ["<leader>ts"] = { "<cmd>Trouble symbols toggle focus=false win.size=0.3<cr>" },
-    ["<leader>tl"] = { "<cmd>Trouble lsp toggle focus=false win.size=0.3<cr>" },
-    ["<leader>tq"] = { "<cmd>Trouble qflist toggle win.size=0.3<cr>" },
+    ["<leader>uu"] = { "<cmd>Trouble<cr>" },
+    ["<leader>ud"] = { "<cmd>Trouble diagnostics toggle win.size=0.3<cr>" },
+    ["<leader>uc"] = { "<cmd>Trouble diagnostics toggle filter.buf=0 win.size=0.3<cr>" },
+    ["<leader>us"] = { "<cmd>Trouble symbols toggle focus=false win.size=0.3<cr>" },
+    ["<leader>ul"] = { "<cmd>Trouble lsp toggle focus=false win.size=0.3<cr>" },
+    ["<leader>uq"] = { "<cmd>Trouble qflist toggle win.size=0.3<cr>" },
 
     -- plugin: sniprun
     ["<leader>ss"] = { "<cmd>SnipRun<CR>" },
     ["<leader>sr"] = { "<cmd>SnipReset<CR>" },
     ["<leader>sc"] = { "<cmd>SnipClose<CR>" },
     ["<leader>sm"] = { "<cmd>SnipReplMemoryClean<CR>" },
+
+    -- plugin: neotest
+    ["<leader>tt"] = { require("neotest").run.run() },
+    ["<leader>tf"] = { require("neotest").run.run(vim.fn.expand("%")) },
+    ["<leader>tdt"] = { require("neotest").run.run({ strategy = "dap" }) },
+    ["<leader>tdf"] = { require("neotest").run.run({ vim.fn.expand("%"), strategy = "dap" }) },
+    ["<leader>ts"] = { require("neotest").run.stop() },
+    ["<leader>ta"] = { require("neotest").run.attach() },
 
     ["<leader>db"] = { '<cmd>lua require"dap".toggle_breakpoint()<CR>' },
     ["<leader>dc"] = { '<cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>' },
@@ -271,19 +280,6 @@ direct_mappings["n"] = {
     ["<leader>dfl"] = { "<cmd>Telescope dap list_breakpoints<CR>" },
     ["<leader>dfv"] = { "<cmd>Telescope dap variables<CR>" },
     ["<leader>dff"] = { "<cmd>Telescope dap frames<CR>" },
-
-    ["<leader>uu"] = { "<cmd>Ultest<CR>" },
-    ["<leader>un"] = { "<cmd>UltestNearest<CR>" },
-    ["<leader>ul"] = { "<cmd>UltestLast<CR>" },
-    ["<leader>ud"] = { "<cmd>UltestDebug<CR>" },
-    ["<leader>udn"] = { "<cmd>UltestDebugNearest<CR>" },
-    ["<leader>uo"] = { "<cmd>UltestOutput<CR>" },
-    ["<leader>ua"] = { "<cmd>UltestAttach<CR>" },
-    ["<leader>ut"] = { "<cmd>UltestStop<CR>" },
-    ["<leader>us"] = { "<cmd>UltestSummary<CR>" },
-    ["<leader>uc"] = { "<cmd>UltestClear<CR>" },
-    ["[t"] = { "<Plug>(ultest-prev-fail)", { noremap = false } },
-    ["]t"] = { "<Plug>(ultest-next-fail)", { noremap = false } },
 }
 
 -- operator-pending
@@ -415,7 +411,10 @@ direct_mappings["x"] = {
     ["<leader>rv"] = { '<Esc><Cmd>lua require("refactoring").refactor("Extract Variable")<CR>' },
     ["<leader>ri"] = { '<Esc><Cmd>lua require("refactoring").refactor("Inline Variable")<CR>' },
 
+    -- plugin: sniprun
     ["<leader>ss"] = { ":'<,'>SnipRun<CR>" },
+
+    -- plugin: actions-preview.nvim
     ["<leader>lc"] = {
         function()
             require("actions-preview").code_actions()
@@ -434,8 +433,8 @@ direct_mappings["i"] = {
     -- plugin: nvim-spider
     ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
     ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
-    ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
+    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR><Right>]] },
+    ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR><Right>]] },
 
     -- toggle global autocomplete flag
     ["<C-c>"] = {

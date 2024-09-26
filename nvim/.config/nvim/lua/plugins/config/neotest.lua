@@ -14,10 +14,12 @@ M.config = function()
                     return vim.fn.getcwd()
                 end,
             }),
-            -- require("rustaceanvim.neotest"),
+            require("rustaceanvim.neotest"),
             require("neotest-vim-test")({
                 ignore_file_types = {
                     "python",
+                    "vim",
+                    "lua",
                 },
             }),
         },
