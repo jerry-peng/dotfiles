@@ -7,7 +7,7 @@ M.servers = {
     "pyright", -- Python
     "ruff", -- Python
     "rust_analyzer", -- Rust
-    "tsserver", -- JS/TS
+    "ts_ls", -- JS/TS
     "lua_ls", -- Lua
     "solargraph", -- Ruby
     "kotlin_language_server", -- Kotlin

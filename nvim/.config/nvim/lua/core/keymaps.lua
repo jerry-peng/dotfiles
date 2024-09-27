@@ -250,12 +250,36 @@ direct_mappings["n"] = {
     ["<leader>sm"] = { "<cmd>SnipReplMemoryClean<CR>" },
 
     -- plugin: neotest
-    ["<leader>tt"] = { function() require("neotest").run.run() end},
-    ["<leader>tf"] = { function() require("neotest").run.run(vim.fn.expand("%")) end },
-    ["<leader>tdt"] = { function() require("neotest").run.run({ strategy = "dap" }) end },
-    ["<leader>tdf"] = { function() require("neotest").run.run({ vim.fn.expand("%"), strategy = "dap" }) end },
-    ["<leader>ts"] = { function() require("neotest").run.stop() end },
-    ["<leader>ta"] = { function() require("neotest").run.attach() end},
+    ["<leader>tt"] = {
+        function()
+            require("neotest").run.run()
+        end,
+    },
+    ["<leader>tf"] = {
+        function()
+            require("neotest").run.run(vim.fn.expand("%"))
+        end,
+    },
+    ["<leader>tdt"] = {
+        function()
+            require("neotest").run.run({ strategy = "dap" })
+        end,
+    },
+    ["<leader>tdf"] = {
+        function()
+            require("neotest").run.run({ vim.fn.expand("%"), strategy = "dap" })
+        end,
+    },
+    ["<leader>ts"] = {
+        function()
+            require("neotest").run.stop()
+        end,
+    },
+    ["<leader>ta"] = {
+        function()
+            require("neotest").run.attach()
+        end,
+    },
 
     ["<leader>db"] = { '<cmd>lua require"dap".toggle_breakpoint()<CR>' },
     ["<leader>dc"] = { '<cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>' },
@@ -434,7 +458,7 @@ direct_mappings["i"] = {
     ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
     ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
     ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR><Right>]] },
-    ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR><Right>]] },
+    ["<M-j>"] = { [[<Left><cmd>lua require("spider").motion("ge")<CR><Right>]] },
 
     -- toggle global autocomplete flag
     ["<C-c>"] = {

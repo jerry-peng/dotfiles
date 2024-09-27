@@ -41,12 +41,6 @@ M.config = function()
             function(server_name) -- default handler
                 lspconfig[server_name].setup({})
             end,
-            ["tsserver"] = function()
-                -- TODO: Remove this override when PR is merged upstream:
-                -- https://github.com/neovim/nvim-lspconfig/pull/3232
-                -- server name was overridden due to upstream breaking change
-                lspconfig.ts_ls.setup({})
-            end,
             ["lua_ls"] = function()
                 lspconfig.lua_ls.setup({
                     on_init = function(client)

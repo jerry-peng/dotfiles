@@ -46,6 +46,11 @@ M.config = function()
                 IlluminatedWordText = { bg = colors.base02, underline = true },
                 IlluminatedWordRead = { bg = colors.base02, underline = true },
                 IlluminatedWordWrite = { bg = colors.base02, underline = true },
+
+                --[[ nvim-hlslens ]]
+                HlSearchLensNear = { bg = colors.orange, fg = colors.base02 },
+                HlSearchLens = { bg = colors.yellow, fg = colors.base02 },
+                HlSearchNear = { bg = colors.orange, fg = colors.base02 },
             }
         end,
     })
