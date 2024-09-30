@@ -260,6 +260,11 @@ direct_mappings["n"] = {
             require("neotest").run.run(vim.fn.expand("%"))
         end,
     },
+    ["<leader>tl"] = {
+        function()
+            require("neotest").run.run_last()
+        end,
+    },
     ["<leader>tdt"] = {
         function()
             require("neotest").run.run({ strategy = "dap" })
@@ -270,7 +275,12 @@ direct_mappings["n"] = {
             require("neotest").run.run({ vim.fn.expand("%"), strategy = "dap" })
         end,
     },
-    ["<leader>ts"] = {
+    ["<leader>tdl"] = {
+        function()
+            require("neotest").run.run_last({ strategy = "dap" })
+        end,
+    },
+    ["<leader>tx"] = {
         function()
             require("neotest").run.stop()
         end,
@@ -280,30 +290,80 @@ direct_mappings["n"] = {
             require("neotest").run.attach()
         end,
     },
-
-    ["<leader>db"] = { '<cmd>lua require"dap".toggle_breakpoint()<CR>' },
-    ["<leader>dc"] = { '<cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>' },
-    ["<leader>dp"] = {
-        '<cmd>lua require"dap".set_breakpoint(nil, nil, vim.fn.input("Log point message: "))<CR>',
+    ["<leader>ts"] = {
+        function()
+            require("neotest").summary.toggle()
+        end,
     },
-    ["<F5>"] = { '<cmd>lua require"dap".continue()<CR>' },
-    ["<F10>"] = { '<cmd>lua require"dap".step_out()<CR>' },
-    ["<F11>"] = { '<cmd>lua require"dap".step_into()<CR>' },
-    ["<F12>"] = { '<cmd>lua require"dap".step_over()<CR>' },
-    ["<leader>dr"] = { '<cmd>lua require"dap".repl.open()<CR>' },
-    ["<leader>dl"] = { '<cmd>lua require"dap".run_last()<CR>' },
+    ["<leader>to"] = {
+        function()
+            require("neotest").output.open()
+        end,
+    },
+    ["<leader>tp"] = {
+        function()
+            require("neotest").output_panel.toggle()
+        end,
+    },
 
-    ["<leader>dss"] = { '<cmd>lua require("plugins.config.dap").scopes()<CR>' },
-    ["<leader>dsf"] = { '<cmd>lua require("plugins.config.dap").frames()<CR>' },
-    ["<leader>dsh"] = { '<cmd>lua require("plugins.config.dap").expressions()<CR>' },
+    -- plugin: nvim-coverage
+    ["<leader>cc"] = { "<cmd>Coverage<CR>" },
+    ["<leader>ct"] = { "<cmd>CoverageToggle<CR>" },
+    ["<leader>cs"] = { "<cmd>CoverageSummary<CR>" },
 
-    ["<leader>dtm"] = { '<cmd>lua require("dap-python").test_method()<CR>' },
-    ["<leader>dtl"] = { '<cmd>lua require("dap-python").test_class()<CR>' },
-    ["<leader>dfm"] = { "<cmd>Telescope dap commands<CR>" },
-    ["<leader>dfo"] = { "<cmd>Telescope dap configurations<CR>" },
-    ["<leader>dfl"] = { "<cmd>Telescope dap list_breakpoints<CR>" },
-    ["<leader>dfv"] = { "<cmd>Telescope dap variables<CR>" },
-    ["<leader>dff"] = { "<cmd>Telescope dap frames<CR>" },
+    -- plugin: nvim-dap
+    ["<leader>db"] = {
+        function()
+            require("dap").toggle_breakpoint()
+        end,
+    },
+    ["<leader>dx"] = {
+        function()
+            require("dap").terminate()
+        end,
+    },
+    ["<leader>dh"] = {
+        function()
+            require("dap.ui.widgets").hover()
+        end,
+    },
+    ["<leader>dp"] = {
+        function()
+            require("dap.ui.widgets").preview()
+        end,
+    },
+    ["<F5>"] = {
+        function()
+            require("dap").continue()
+        end,
+    },
+    ["<F9>"] = {
+        function()
+            require("dap").step_back()
+        end,
+    },
+    ["<F10>"] = {
+        function()
+            require("dap").step_into()
+        end,
+    },
+    ["<F11>"] = {
+        function()
+            require("dap").step_over()
+        end,
+    },
+    ["<F12>"] = {
+        function()
+            require("dap").step_out()
+        end,
+    },
+
+    -- plugin: nvim-dap-ui
+    ["<leader>du"] = {
+        function()
+            require("dapui").toggle()
+        end,
+    },
 }
 
 -- operator-pending
@@ -420,8 +480,6 @@ direct_mappings["x"] = {
     -- plugin: nvim-treesitter-textobjects
     ["<M-;>"] = { require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_next },
     ["<M-,>"] = { require("nvim-treesitter.textobjects.repeatable_move").repeat_last_move_previous },
-
-    ["<leader>ds"] = { '<ESC>:lua require("dap-python").debug_selection()<CR>' },
 
     -- plugin: refactoring.nvim
     ["<M-r>"] = {

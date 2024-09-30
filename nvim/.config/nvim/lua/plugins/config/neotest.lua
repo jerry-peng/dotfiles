@@ -17,9 +17,9 @@ M.config = function()
             require("rustaceanvim.neotest"),
             require("neotest-vim-test")({
                 ignore_file_types = {
+                    "lua",
                     "python",
                     "vim",
-                    "lua",
                 },
             }),
         },

@@ -94,7 +94,6 @@ M.config = function()
 
     -- Extensions
     telescope.load_extension("fzf")
-    telescope.load_extension("dap")
     telescope.load_extension("projects")
     telescope.load_extension("grapple")
     telescope.load_extension("aerial")

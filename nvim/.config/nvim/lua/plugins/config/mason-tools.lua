@@ -54,7 +54,6 @@ M.formatters = {
 M.debug_adapters = {
     "debugpy", -- Python
     "codelldb", -- C/C++/Rust
-    "js-debug-adapter", -- JavaScript/TypeScript
 }
 
 M.tools = utils.flatten_lists({ M.servers, M.linters, M.formatters, M.debug_adapters })

@@ -433,7 +433,7 @@ return {
             "nvim-lua/plenary.nvim",
         },
         config = function()
-            require("coverage").setup()
+            require("plugins.config.coverage").config()
         end,
     },
 
@@ -443,21 +443,17 @@ return {
         dependencies = {
             "WhoIsSethDaniel/mason-tool-installer.nvim",
             "mfussenegger/nvim-dap",
+            "rcarriga/nvim-dap-ui",
         },
         config = function()
             require("plugins.config.dap").config()
         end,
     },
     {
-        "rcarriga/nvim-dap-ui", -- UI for DAP
+        "rcarriga/nvim-dap-ui", -- UI for nvim-dap
         dependencies = {
+            "mfussenegger/nvim-dap",
             "nvim-neotest/nvim-nio",
         },
-        config = function()
-            require("dapui").setup()
-        end,
-    },
-    {
-        "nvim-telescope/telescope-dap.nvim", -- DAP integration with telescope
     },
 }
