@@ -312,7 +312,7 @@ direct_mappings["n"] = {
     ["<leader>cs"] = { "<cmd>CoverageSummary<CR>" },
 
     -- plugin: nvim-dap
-    ["<leader>db"] = {
+    ["<leader>dt"] = {
         function()
             require("dap").toggle_breakpoint()
         end,
@@ -332,27 +332,27 @@ direct_mappings["n"] = {
             require("dap.ui.widgets").preview()
         end,
     },
-    ["<F5>"] = {
+    ["<leader>dc"] = {
         function()
             require("dap").continue()
         end,
     },
-    ["<F9>"] = {
+    ["<leader>db"] = {
         function()
             require("dap").step_back()
         end,
     },
-    ["<F10>"] = {
+    ["<leader>di"] = {
         function()
             require("dap").step_into()
         end,
     },
-    ["<F11>"] = {
+    ["<leader>dv"] = {
         function()
             require("dap").step_over()
         end,
     },
-    ["<F12>"] = {
+    ["<leader>do"] = {
         function()
             require("dap").step_out()
         end,
