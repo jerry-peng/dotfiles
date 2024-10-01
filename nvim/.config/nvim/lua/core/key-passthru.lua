@@ -62,9 +62,6 @@ local mappings = {
             ["<leader>pc"] = "@class.outer",
         },
     },
-    lsp_signature = {
-        toggle = "<C-s>",
-    },
     cmp = {
         scroll_docs_up = "<C-u>",
         scroll_docs_down = "<C-d>",

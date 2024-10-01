@@ -10,7 +10,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Homebrew
+# Homebrew shell completion
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
 fi
@@ -20,8 +20,8 @@ fi
 autoload -Uz compinit
 compinit
 
-# Use vim as default editor
-export VISUAL=vim
+# Use nvim as default editor
+export VISUAL=nvim
 export EDITOR="$VISUAL"
 
 # For killing lag for vim key binding in zsh
