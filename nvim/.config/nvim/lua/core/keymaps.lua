@@ -415,6 +415,7 @@ direct_mappings["x"] = {
 
     -- line text objects
     il = { "g_o^" },
+    al = { "g_o0" },
 
     -- reselect after indent/outdent
     ["<"] = { "<gv" },
