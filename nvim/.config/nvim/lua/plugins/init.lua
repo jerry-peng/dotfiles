@@ -362,6 +362,9 @@ return {
         "mrcjkb/rustaceanvim", -- adds additional non-standard features specific to rust-analyzer
         version = "^4",
         ft = { "rust" },
+        config = function()
+            require("plugins.config.rustacean").config()
+        end,
     },
     {
         "smjonas/inc-rename.nvim", -- incremental rename
