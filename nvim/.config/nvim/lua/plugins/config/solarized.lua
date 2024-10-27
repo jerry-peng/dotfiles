@@ -38,6 +38,8 @@ M.config = function()
                 RenderMarkdownH4Bg = { bg = colors.violet, fg = colors.base02 },
                 RenderMarkdownH5Bg = { bg = colors.magenta, fg = colors.base02 },
                 RenderMarkdownH6Bg = { bg = colors.orange, fg = colors.base02 },
+                -- ensure inline code in heading is displayed correctly
+                RenderMarkdownCodeInline = { bg = colors.base02_dark, fg = colors.base0 },
 
                 --[[ aerial.nvim ]]
                 AerialLine = { bg = colors.base01, fg = colors.base03 },

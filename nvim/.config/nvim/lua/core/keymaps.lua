@@ -94,9 +94,9 @@ direct_mappings["n"] = {
     ["<leader>Q"] = { "<cmd>Bdelete!<CR><cmd>q<CR>" },
 
     -- plugin: nvim-spider
-    ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["<M-k>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
     ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-l>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
     ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
 
     -- plugin: flash.nvim
@@ -372,9 +372,9 @@ direct_mappings["o"] = {
     il = { "<cmd>norm vil<CR>" },
 
     -- plugin: nvim-spider
-    ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["<M-k>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
     ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-l>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
     ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
 
     -- plugin: flash.nvim
@@ -430,9 +430,9 @@ direct_mappings["x"] = {
     ["]e"] = { "<Plug>(unimpaired-move-selection-down)gv" },
 
     -- plugin: nvim-spider
-    ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["<M-k>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
     ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-l>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
     ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
 
     -- plugin: dial.nvim
@@ -514,10 +514,10 @@ direct_mappings["i"] = {
     ["<C-k>"] = { "<Up>" },
 
     -- plugin: nvim-spider
-    ["<M-l>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
+    ["<M-k>"] = { [[<cmd>lua require("spider").motion("w")<CR>]] },
     ["<M-h>"] = { [[<cmd>lua require("spider").motion("b")<CR>]] },
-    ["<M-k>"] = { [[<cmd>lua require("spider").motion("e")<CR><Right>]] },
-    ["<M-j>"] = { [[<Left><cmd>lua require("spider").motion("ge")<CR><Right>]] },
+    ["<M-l>"] = { [[<cmd>lua require("spider").motion("e")<CR>]] },
+    ["<M-j>"] = { [[<cmd>lua require("spider").motion("ge")<CR>]] },
 
     -- toggle global autocomplete flag
     ["<C-c>"] = {
