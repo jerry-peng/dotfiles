@@ -39,8 +39,8 @@ export NODE_PATH="/usr/local/lib/node_modules"
 
 # PATH
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
-export PATH="/usr/local/opt/ruby/bin:$PATH" # Ruby
-export PATH="/usr/local/opt/python/libexec/bin:$PATH" # Python
+export PATH="/opt/homebrew/bin:$PATH" # Homebrew
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH" # Ruby
 export PATH="/usr/local/opt/llvm/bin:$PATH" # LLVM
 export PATH="$HOME/.cargo/bin:$PATH" # Cargo
 export PATH="/usr/local/opt/ssh-copy-id/bin:$PATH" # ssh-copy-id

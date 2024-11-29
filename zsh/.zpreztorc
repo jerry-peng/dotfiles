@@ -36,10 +36,8 @@ zstyle ':prezto:load' pmodule \
   'utility' \
   'ssh' \
   'history' \
-  \
   'git' \
   'completion' \
-  \
   'syntax-highlighting' \
   'history-substring-search' \
   'autosuggestions' \
