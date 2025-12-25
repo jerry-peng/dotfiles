@@ -124,6 +124,9 @@ opt.fillchars:append({ diff = "╱" }) -- fold text filler char
 opt.foldenable = true -- enable folding at startup
 opt.foldlevel = 99 -- minimum level of fold closed by default, prevent folding when opening files
 
+-- Jump
+opt.jumpoptions = "stack"
+
 -- Disable builtin plugins
 local disabled_built_ins = {
     "netrw",

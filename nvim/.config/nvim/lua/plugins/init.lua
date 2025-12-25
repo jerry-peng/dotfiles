@@ -360,7 +360,7 @@ return {
     {
         -- TODO: need more configuration
         "mrcjkb/rustaceanvim", -- adds additional non-standard features specific to rust-analyzer
-        version = "^4",
+        version = "^6",
         ft = { "rust" },
         config = function()
             require("plugins.config.rustacean").config()

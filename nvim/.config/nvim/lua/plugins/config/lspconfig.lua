@@ -30,6 +30,7 @@ M.config = function()
             -- specify diagnostics source if many
             source = "if_many",
         },
+        virtual_text = true,
     })
 
     -- attach servers
